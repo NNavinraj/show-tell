@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doodle Game</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+  <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+  <script>
+		if (typeof module === 'object') {
+			window.module = module;
+			module = undefined;
+		}
+	</script>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../static/index.js"></script>
+	<script>
+		if (window.module) module = window.module;
+	</script>
+
+</head>
+<script>
+  function plot() {
+
+    var canvas = document.getElementById("canvas");
+    document.getElementById("chartContainer").style.display = "block";
+    document.getElementById("doodlepred").style.display = "block";
+    var ctx = canvas.getContext("2d");
+
+    var image = new Image();
+    image.onload = function() {
+      ctx.drawImage(image, 0, 0);
+    };
+    image.src = "{{putback}}"
+    var preds = {{preds}}
+    var classes = {{classes | safe}}
+    var chart = new CanvasJS.Chart("chartContainer", {
+      theme: "light2",
+      animationEnabled: true,
+      title: {
+        text: "Detected Animals"
+      },
+      axisY : {
+        minimum: 0,
+        maximum: 100
+      },
+      data: [{
+        type: "column",
+
+        dataPoints: [{
+            y: preds[3] * 100,
+            label: classes[3]
+          },
+          {
+            y: preds[2] * 100,
+            label: classes[2]
+          },
+          {
+            y: preds[1] * 100,
+            label: classes[1]
+          },
+          {
+            y: preds[0] * 100,
+            label: classes[0]
+          },
+        ]
+      }]
+    });
+    chart.render();
+  }
+</script>
+
+<body>
+  <nav>
+    <div class="wrapper">
+      <div class="logo"><a href={{url_for('home')}}>SG CATS & DOGS</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href={{url_for('home')}}>Home</a></li>
+        <li><a href={{url_for('about')}}>About</a></li>
+        <li>
+          <a href={{url_for('dogs')}} class="desktop-item">Dogs</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dogs</label>
+          <ul class="drop-menu">
+            <li><a href="{{url_for('dogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('dogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('dogs')}}#large">Large Breed</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('cats')}}>Cats</a></li>
+        <li>
+          <a href="#" class="desktop-item">Know Your Breed</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Know Your Breed</label>
+          <ul class="drop-menu">
+            <li><a href={{url_for('dogclassify')}}>Know Your Dog</a></li>
+            <li><a href={{url_for('catclassify')}}>Know Your Cat</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('doodle')}}>Doodle Game</a></li>
+      </ul>
+      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Animal Doodles</h1>
+      <p>Draw a bird, cat, dog or rabbit and watch a Neural Network classify your hand-drawn animal doodles. </p>
+    </div>
+    <form style="min-height: 500px; padding: 20px; border-radius: 10px; background-color: white;" method='POST' onsubmit="return prepare()">
+      <input type="hidden" id="payload" name="payload" value="x">
+      <div class="form-group">
+        <label for="sel1" style="margin-left:7%; font-size: 20px;">Draw in this box:</label>
+        <br>
+      </div>
+      <button type="submit" class="btn btn-success" style="margin-left:7%" id="predict">Predict</button>
+      <button type="button" class="btn btn-info" id="clearButton">Clear</button>
+      <br>
+      <br>
+      <canvas id="canvas" width="280" height="280" style="float:left;border:8px solid; border-radius: 10px; cursor: crosshair;"></canvas>
+      
+      <h3 class="predchart" id="doodlepred" style="margin-left: 350px; display: none;">You have drawn a: {{pred}}</h3>
+      <div class="predchart" id="chartContainer" style="margin-left: 350px;height: 300px; display: none;"></div>
+      
+
+      {% if chart %}
+      <script>
+        plot()
+      </script>
+      {% endif %}
+      <br>
+    </form>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src="../static/index.js"></script>
+    <script type="text/javascript">
+      function prepare() {
+        var canvasObj = document.getElementById("canvas");
+        var img = canvasObj.toDataURL("image/png");
+		console.log(img);
+        document.getElementById("payload").value = img;
+        return true;
+      }
+    </script>
+</body>
+</html>
