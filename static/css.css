@@ -32,6 +32,59 @@ h2 {
   background:rgb(208, 240, 255);
 }
 
+/* div#loading {
+  width: 100px;
+  height: 100px;
+  display: none;
+  background: url(loadingimage.gif) no-repeat;
+  background-size: 150px;
+  cursor: wait;
+} */
+
+#loader {
+  position: relative;
+  top: 100px;
+  z-index: 1;
+  display: none;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
 @import url(https://fonts.googleapis.com/css?family=Signika:700,300,600);
 
 html, h1 { height: 100%; }

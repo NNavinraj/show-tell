@@ -47,14 +47,14 @@
   <div class="main">
         <h1><span>K</span><span>N</span><span>O</span><span>W</span><span> </span><span>Y</span><span>O</span><span>U</span><span>R</span><span> </span><span>C</span><span>A</span><span>T</span><span>!</span></h1>
         <h2>Upload a picture of your cat and we'll tell you what breed it is!</h2>
-        <form class="p-3 text-center upload" action='/catclassify.html', method="post" enctype="multipart/form-data">
+        <form class="p-3 text-center upload" action='/catclassify.html', method="post" enctype="multipart/form-data" onsubmit="loading();">
             <input class="form-control" type ="file" name="imagefile">
             <input class="btn btn-outline-primary" type="submit" value="Predict Image">
         </form>
-        
+        <div id="loader"></div>
         
         {% for item in cat %}
-        <div class="breedhighlight">
+        <div class="breedhighlight" id="content">
           <img src="data:image/png;base64,{{ img_path }}" width ="500px">
           
           <div style="text-align: justify;">
@@ -71,5 +71,11 @@
         {% endfor %}
         
   </div>
+  <script type="text/javascript">// <![CDATA[
+    function loading(){
+      document.getElementById("loader").style.display = "block";  
+      document.getElementById("content").style.display = "none";  
+    }
+  // ]]></script> 
 </body>
 </html>
