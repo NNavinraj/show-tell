@@ -4,7 +4,6 @@ import numpy as np
 import re
 import base64
 from PIL import Image
-from tensorflow import keras 
 from keras.models import load_model
 import json
 import yaml
@@ -62,7 +61,7 @@ from keras.applications.vgg19 import preprocess_input as preprocess_input_vgg19
 from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras.applications.resnet50 import preprocess_input as preprocess_input_resnet50
 from PIL import ImageFile   
-from tensorflow.keras.preprocessing import image                  
+from keras.preprocessing import image                  
 from tqdm import tqdm
 import ntpath
 
@@ -283,6 +282,7 @@ def dogclassify():
                                 
                                 # draw a bounding box rectangle and label on the image
                                 color = [int(c) for c in COLORS[classIDs[i]]]
+                                y = y - 10 if y - 10 > 10 else y + 15
                                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
                                 
                                 print(boxes)
@@ -301,36 +301,42 @@ def dogclassify():
     #get the image of the dog for prediction
         
         # load our input image and grab its spatial dimensions
+        try:
+            #img = request.files["imagefile"].read()
+            img = Image.open(io.BytesIO(img))
+            npimg=np.array(img)
+            image=npimg.copy()
+            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            res=get_predection(image,nets,Lables,Colors)
+            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
 
-        #img = request.files["imagefile"].read()
-        img = Image.open(io.BytesIO(img))
-        npimg=np.array(img)
-        image=npimg.copy()
-        image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        res=get_predection(image,nets,Lables,Colors)
-        image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
+            cv2.waitKey()
+            cv2.imwrite("filename.png", res)
+            np_img=Image.fromarray(image)
+            img_encoded=image_to_byte_array(np_img)  
+            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")  
 
-        cv2.waitKey()
-        cv2.imwrite("filename.png", res)
-        np_img=Image.fromarray(image)
-        img_encoded=image_to_byte_array(np_img)  
-        base64_bytes = base64.b64encode(img_encoded).decode("utf-8")  
-        
-        
-
-
-
+            #get description from database
+            cur = mysql.connection.cursor()
+            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
+            value = cur.execute(sql)
+            description = cur.fetchall()
+            cur.close()
+            var = gTTS(str(description[0][0]), lang = 'en')
+            var.save("static/dogsound.mp3")
+            return render_template("dogclassify.html", img_path = base64_bytes, description = description)
+        except:
 
     #get description from database
-        cur = mysql.connection.cursor()
-        sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
-        value = cur.execute(sql)
-        description = cur.fetchall()
-        cur.close()
-        var = gTTS(str(description[0][0]), lang = 'en')
-        var.save("static/dogsound.mp3")
-        return render_template("dogclassify.html", img_path = base64_bytes, description = description)
+            cur = mysql.connection.cursor()
+            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
+            value = cur.execute(sql)
+            description = cur.fetchall()
+            cur.close()
+            var = gTTS(str(description[0][0]), lang = 'en')
+            var.save("static/dogsound.mp3")
+            return render_template("dogclassify.html", noyolo = pred_img_path, description = description)
 
 #load the cat dataset
 def load_dataset(path):
@@ -682,6 +688,96 @@ def doodle():
         print (pred)
         print (list(val[0]))
         return render_template("doodle.html", preds=list(val[0]), classes=json.dumps(classes), chart=True, putback=request.form["payload"],pred=pred)
+
+#SG PET STORE INDEX 
+@app.route("/sgPetStoreIndex.html")
+def sgPetStoreHome():
+    return render_template("sgPetStoreIndex.html")
+
+@app.route("/sgPetStoreContactUs.html")
+def sgPetStoreContactUs():
+    return render_template("sgPetStoreContactUs.html")
+	
+@app.route("/buyheredog/dog/<name>")
+def buydog(name):
+    cur = mysql.connection.cursor()
+    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    return render_template("buyheredog.html", result=result, img=name)
+    cur.close()
+    
+@app.route("/buyherecat/cat/<name>")
+def buycat(name):
+    cur = mysql.connection.cursor()
+    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    return render_template("buyherecat.html", result=result, img=name)
+    cur.close()
+	
+@app.route("/sgPetStoreDogs.html")
+def sgPetStoreDogs():
+    #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where HDB = 'HDB' and petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    hdb = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'small' and petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    small = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'Large' and petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    large = cur.fetchall()
+    
+    #to include the values
+    return render_template("sgPetStoreDogs.html", hdb=hdb, small=small, large=large)
+    cur.close()
+    
+@app.route("/sgPetStoreCats.html")
+def sgPetStoreCats():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where petType ='cat' and petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("sgPetStoreCats.html", cat=cat)
+    cur.close()
+	
+@app.route("/SG Pet Store/dog/<name>")
+def sgPetStoreDogBreed(name):
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store'  and breed = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    return render_template("sgPetStoreDogBreed.html", result=result, img=name)
+    cur.close()
+
+@app.route("/SG Pet Store/buydog/<name>")
+def sgPetStoreDogBreedBuy(name):
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store'  and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "SELECT * FROM petstoreanimal where petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("sgPetStoreDogBreedBuy.html", result=result, others=others,img=name)
+    cur.close()
+    
+@app.route("/SG Pet Store/buycat/<name>")
+def sgPetStoreCatBreed(name):
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store' and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "SELECT * FROM petstoreanimal where petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("sgPetStoreCatBreed.html", result=result,others=others, img=name)
+    cur.close()
+
 if __name__ =="__main__":
 	#app.debug = True
 	app.run(port=3000, debug = True)

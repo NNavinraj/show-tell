@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Breed</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css1.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style1.css')}}">
+    <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+</head>
+<body>
+<nav>               
+    <div class="wrapper">
+      <div class="logo"><a href={{url_for('sgPetStoreHome')}}>SG PET STORE</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href={{url_for('sgPetStoreHome')}}>Home</a></li>
+        <li><a href={{url_for('sgPetStoreContactUs')}}>Contact Us</a></li>
+        <li>
+          <a href={{url_for('sgPetStoreDogs')}} class="desktop-item">Dogs</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dogs</label>
+          <ul class="drop-menu">
+            <li><a href="{{url_for('sgPetStoreDogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('sgPetStoreDogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('sgPetStoreDogs')}}#large">Large Breed</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('sgPetStoreCats')}}>Cats</a></li>
+      </ul>
+      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  
+  <div class="main">
+    <div>
+      <div class="topspace"></div>
+      {% for item in result %}
+      <h1 style="padding: 0px; font:bold 5.5vw/1.6 'Signika', sans-serif;">{{item[2]|safe}}</h1>
+      <div class="breedhighlight">
+        <div style="text-align: justify;">
+          <h3 style="text-align: left; font-size: 30px;">Hello I am {{item[2]|safe}},</h3>
+          <p>I am a {{item[7]|safe}},</p>
+          <p>My Date of Birth is {{item[4]|safe}} and</p>
+          <p>I am a {{item[9]|safe}} {{item[3]|safe}} who is {{item[10]|safe}}.</p>
+          <p>Bring me home at ${{item[8]|safe}}</p>
+        </div>
+        <img src="{{url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}" width="400px"/>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

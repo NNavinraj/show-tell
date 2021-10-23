@@ -51,7 +51,7 @@
             <input class="form-control" type ="file" name="imagefile">
             <input class="btn btn-outline-primary" type="submit" value="Predict Image">
         </form>
-        
+        {% if img_path %}
         {% for item in description %}
         <div class="breedhighlight">
           <img src="data:image/png;base64,{{ img_path }}" width ="500px">
@@ -62,9 +62,29 @@
             <p><strong>Description: </strong><br>{{item[1]|safe}}</p>
             <p><strong>Average Life Span: </strong>{{item[2]|safe}}</p><br>
             <p>More info at this <a href="dog/{{item[0]}}">page</a></p>
+            <button type="button"><a href="buyheredog/dog/{{item[0]}}">Buy here!</button></a>
+
           </div>
         </div>
       {% endfor %}
+
+      {% endif %}
+      {% if noyolo %}
+        {% for item in description %}
+        <div class="breedhighlight">
+          <img src="{{ noyolo }}" width ="500px">
+          
+          <div style="text-align: justify;">
+            <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}</h3>
+            <audio controls autoplay><source src="static/dogsound.mp3" type="audio/mp3"></audio>
+            <p><strong>Description: </strong><br>{{item[1]|safe}}</p>
+            <p><strong>Average Life Span: </strong>{{item[2]|safe}}</p><br>
+            <p>More info at this <a href="dog/{{item[0]}}">page</a></p>
+            <button type="button"><a href="buyheredog/dog/{{item[0]}}">Buy here!</button></a>
+          </div>
+        </div>
+      {% endfor %}
+      {% endif %}
         
 </body>
 </html>

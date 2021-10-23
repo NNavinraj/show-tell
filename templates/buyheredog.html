@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Your Dog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+</head>
+<body>
+  <nav>
+    <div class="wrapper">
+      <div class="logo"><a href={{url_for('home')}}>SG CATS & DOGS</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href={{url_for('home')}}>Home</a></li>
+        <li><a href={{url_for('about')}}>About</a></li>
+        <li>
+          <a href={{url_for('dogs')}} class="desktop-item">Dogs</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dogs</label>
+          <ul class="drop-menu">
+            <li><a href="{{url_for('dogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('dogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('dogs')}}#large">Large Breed</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('cats')}}>Cats</a></li>
+        <li>
+          <a href="#" class="desktop-item">Know Your Breed</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Know Your Breed</label>
+          <ul class="drop-menu">
+            <li><a href={{url_for('dogclassify')}}>Know Your Dog</a></li>
+            <li><a href={{url_for('catclassify')}}>Know Your Cat</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('doodle')}}>Doodle Game</a></li>
+      </ul>
+      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  
+    <div class="main">
+        <div class="topspace"></div>
+        <h2>Choose your dog here !</h2>
+      <div class="container2">
+      {% for item in result %}
+        <div class="anchor"><a href="/{{item[1]}}/buydog/{{item[2]}}">
+        <img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}">
+        <p style="font-size: 20px;">{{item[2]}}</p>
+        <p style="font-size: 20px;">Pet Store : {{item[1]}}</p>
+        <p>Gender : {{item[4]}}</p>
+        <p>Date of Birth : {{item[3]}}</p>
+        <p>Price : ${{item[7]}}</p>
+        <p>Contact Us : {{item[11]}}</p>
+        <p>Email Us : {{item[12]}}</p>
+        <p>Find Us :<br> {{item[10]}}</p>
+        </a>
+        </div>
+    {% endfor %}
+        </div>
+
+        
+</body>
+</html>
