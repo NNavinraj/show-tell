@@ -42,10 +42,14 @@
       <div class="breedhighlight">
         <div style="text-align: justify;">
           <h3 style="text-align: left; font-size: 30px;">Hello I am {{item[2]|safe}},</h3>
-          <p>I am a {{item[7]|safe}},</p>
+          <p>I am a {{item[6]|safe}},</p>
           <p>My Date of Birth is {{item[4]|safe}} and</p>
-          <p>I am a {{item[9]|safe}} {{item[3]|safe}} who is {{item[10]|safe}}.</p>
-          <p>Bring me home at ${{item[8]|safe}}</p>
+          <p>I am a {{item[8]|safe}} {{item[3]|safe}}.</p>
+          <p>Bring me home at ${{item[7]|safe}}</p><br>
+          <p>Contact the following for more details</p>
+          <p>Telephone : {{item[10]|safe}}</p>
+          <p>Email : {{item[11]|safe}}</p>
+          <p>Address : {{item[12]|safe}}</p>
         </div>
         <img src="{{url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}" width="400px"/>
       </div>
@@ -54,11 +58,15 @@
       <h1 style="padding: 0px; font:bold 5.5vw/1.6 'Signika', sans-serif;">{{item[2]|safe}}</h1>
       <div class="breedhighlight">
         <div style="text-align: justify;">
-          <h3 style="text-align: left; font-size: 30px;">Hello I am {{item[2]|safe}},</h3>
-          <p>I am a {{item[7]|safe}},</p>
+        <h3 style="text-align: left; font-size: 30px;">Hello I am {{item[2]|safe}},</h3>
+          <p>I am a {{item[6]|safe}},</p>
           <p>My Date of Birth is {{item[4]|safe}} and</p>
-          <p>I am a {{item[9]|safe}} {{item[3]|safe}} who is {{item[10]|safe}}.</p>
-          <p>Bring me home at ${{item[8]|safe}}</p>
+          <p>I am a {{item[8]|safe}} {{item[3]|safe}}.</p>
+          <p>Bring me home at ${{item[7]|safe}}</p><br>
+          <p>Contact the following for more details</p>
+          <p>Telephone : {{item[10]|safe}}</p>
+          <p>Email : {{item[11]|safe}}</p>
+          <p>Address : {{item[12]|safe}}</p>
         </div>
         <img src="{{url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}" width="400px"/>
       </div>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws Shop</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css3.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style3.css')}}">
+    <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+</head>
+<body>
+<nav>               
+    <div class="wrapper">
+      <div class="logo"><a href={{url_for('PawsShopHome')}}>Paws Shop</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href={{url_for('PawsShopHome')}}>Home</a></li>
+        <li><a href={{url_for('PawsShopContactUs')}}>Contact Us</a></li>
+        <li>
+          <a href={{url_for('PawsShopDogs')}} class="desktop-item">Dogs</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dogs</label>
+          <ul class="drop-menu">
+            <li><a href="{{url_for('PawsShopDogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('PawsShopDogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('PawsShopDogs')}}#large">Large Breed</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('PawsShopCats')}}>Cats</a></li>
+      </ul>
+      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topspace"></div>
+  
+ <div class ="centerbody">  
+     <h1>Paws Shop</h1>
+         <div class ="centerbody">  
+             Get your pets here!   
+         </div><br>
+         <div class="body-text">
+      <div class="title">Contact Us</div>
+          {% for item in cat %}
+      <p style ="font-size: xx-large;">Phone : {{item[2]}}</p>
+      <p style ="font-size: xx-large;">Email : {{item[3]}}</p>
+      <p style ="font-size: xx-large;">Address : {{item[1]}}</p>
+       {% endfor %}
+
+       </div>
+    </div> 
+    <div class= "acenter"><img src= "static/dogs/small.jpg",  width="450" height="500"></div>
+     <div class ="centerbody">  
+    Feel free to contact us. Ask your questions about your new pet, and seek some advice on his training, food, and exercise regimen. We would be glad to prepare you for the new family member that you will be taking home with you. We want you to enjoy having a good pet and we want to be sure that your new pet will have a comfortable life with you.
+</div>
+    </div><br>
+      
+  </div>
+</body>
+</html>

@@ -3,43 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogs</title>
+    <title>Cats</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css')}}">
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 </head>
 <body>
-<nav>
+<nav>               
     <div class="wrapper">
-      <div class="logo"><a href="PLCIndex.html">PET LOVING CENTER</a></div>
+      <div class="logo"><a href={{url_for('PLCHome')}}>Pet Loving Center</a></div>
       <input type="radio" name="slider" id="menu-btn">
       <input type="radio" name="slider" id="close-btn">
       <ul class="nav-links">
         <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
-        <li><a href="PLCIndex.html">Home</a></li>
-        <li><a href="PLCContactUs.html">Contact Us</a></li>
+        <li><a href={{url_for('PLCHome')}}>Home</a></li>
+        <li><a href={{url_for('PLCContactUs')}}>Contact Us</a></li>
         <li>
-          <a href="PLCDogs.html" class="desktop-item">Dogs</a>
+          <a href={{url_for('PLCDogs')}} class="desktop-item">Dogs</a>
           <input type="checkbox" id="showDrop">
           <label for="showDrop" class="mobile-item">Dogs</label>
           <ul class="drop-menu">
-            <li><a href="PLCDogs.html#hdb">HDB Approved</a></li>
-            <li><a href="PLCDogs.html#small">Small Breed</a></li>
-            <li><a href="PLCDogs.html#large">Large Breed</a></li>
+            <li><a href="{{url_for('PLCDogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('PLCDogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('PLCDogs')}}#large">Large Breed</a></li>
           </ul>
         </li>
-        <li><a href="PLCCats.html">Cats</a></li>
+        <li><a href={{url_for('PLCCats')}}>Cats</a></li>
       </ul>
       <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
     </div>
   </nav>
-  
   <div class="main">
     <div class="topspace"></div>
     <h3 class="dogsh3">Cats for sale</h3>
      <div class="container2">
         {% for item in cat %}
-        <div class="anchor"><a href="PLCDog-{{item[7]}}"><img src="{{ url_for('static', filename='cats/' + item[7] + '1.jpg')}}"><p style="font-size: 20px;">{{item[2]}}</p></a></div>
+        <div class="anchor"><a href="/{{item[1]}}/buycat/{{item[2]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
         {% endfor %}
     </div>
   </div>

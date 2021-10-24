@@ -37,11 +37,14 @@
     <div class="topspace"></div>
     <div class="body-text">
       <div class="title">Contact Us</div>
-      <p style ="font-size: xx-large;">Phone : 88776368</p>
-      <p style ="font-size: xx-large;">Email : SGPetStore@gmail.com</p>
-      <p style ="font-size: xx-large;">Whatapp :<a href= "shorturl.at/cpsCL"> Click to whatapp us</a></p>
+         {% for item in cat %}
+      <p style ="font-size: xx-large;">Phone : {{item[2]}}</p>
+      <p style ="font-size: xx-large;">Email : {{item[3]}}</p>
+      <p style ="font-size: xx-large;">Address : {{item[1]}}</p>
+       {% endfor %}
        </div>
     </div> 
+
  <div class ="centerbody">  
      <h1>SG PET STORE</h1>
          <div class ="centerbody">  
@@ -53,15 +56,7 @@
 </div>
     </div>
     <br>
-    
-<div class = "footer">
-    <div class ="title">MOST POPULAR PET</div>
-       <a href="dogs.html"><img src="static/dogs/Dachshund2.jpg"></a>
-       <a href="cats.html"><img src="static/dogs/golden retriever2.jpg"></a>
-       <a href="dogs.html"><img src="static/dogs/labrador retriever2.jpg"></a>
-
-</div>
-
+ 
   </div>
 </body>
 </html>

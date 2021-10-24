@@ -18,7 +18,7 @@ https://dev.mysql.com/downloads/file/?id=506568
 
 >launch MySQL Workbench > open local instance > create a new schema and name it as 'flaskapp'
 
->import data by going to Administration > data import/restore > select the folder Dump20211019 > start import
+>import data by going to Administration > data import/restore > select the folder Dump20211024 > start import
 
 >you should now have the database 'flaskapp', which contain the table 'dog' and 'cat', which contain info like Breed, Descriptions, AverageLifeSpan, Characteristic, etc..
 

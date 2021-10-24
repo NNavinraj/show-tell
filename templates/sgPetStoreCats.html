@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogs</title>
+    <title>Cats</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css1.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style1.css')}}">
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
@@ -38,7 +38,7 @@
     <h3 class="dogsh3">Cats for sale</h3>
      <div class="container2">
         {% for item in cat %}
-        <div class="anchor"><a href="{{item[1]}}/dog/{{item[7]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
+        <div class="anchor"><a href="/{{item[1]}}/buycat/{{item[2]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
         {% endfor %}
     </div>
   </div>

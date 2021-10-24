@@ -47,16 +47,20 @@
     </div>
         <h3 class="dogsh3">See all of our Dogs and Cat here</h3>
     <div class="container1">
-      <div class="anchor"><img src="static/dogs/small.jpg"><p style="font-size: 40px;">
-      MAKE APPOINTMENT TO VIEW PREFERRED BREED</p><p>SMS the following to 88776368:<br> 1) Name<br> 2) Preferred Breed<br> 3)Appointment Time</p></div>
+      <div class="anchor"><p style="font-size: 40px;">
+          {% for item in cat %}
+
+      MAKE APPOINTMENT TO VIEW PREFERRED BREED</p><p>SMS the following to {{item[2]}}:<br> 1) Name<br> 2) Preferred Breed<br> 3)Appointment Time</p></div>
+     {% endfor %}
+
     </div>
     <div class="container1">
-      <div class="anchor"><img src="static/dogs/small.jpg"><p style="font-size: 40px;">
+      <div class="anchor"><p style="font-size: 40px;">
       CHOOSE YOUR PERFECT PET</p>
       <p>Interact with the puppy or cat and our sale representative will assist in the selection process</p></div>
     </div> 
     <div class="container1">
-      <div class="anchor"><img src="static/dogs/small.jpg"><p style="font-size: 40px;">
+      <div class="anchor"><p style="font-size: 40px;">
       PETS GOES TO LOVING FAMILY</p>
       <p>Coverage with 2 Vaccinations, Microchip, Deworming and Vet Checked .</p></div>
     </div>   
@@ -68,9 +72,11 @@ As highly experienced and knowledgeable pet sellers and owners, we also provide 
 We have been in the business of selling puppies and dogs for years and we know the precise breed that suits a particular family, individual and lifestyle. This means we don’t just sell pets because we want to deal business; we discuss and connect with you so we know exactly what you desire and then let you have it – without stress or confusion.
 Our services go beyond just sales of puppies in Singapore; we educate prospective dog owners! </h1>
     <h3 class="dogsh3">Contact Us</h3>
-    <p>Phone : 88776368</p>
-    <p>Email : SGPetStore@gmail.com</p>
+    {% for item in cat %}
 
+    <p>Phone : {{item[2]}}</p>
+    <p>Email : {{item[3]}}</p>
+ {% endfor %}
 
   </div>
 </body>

@@ -692,12 +692,71 @@ def doodle():
 #SG PET STORE INDEX 
 @app.route("/sgPetStoreIndex.html")
 def sgPetStoreHome():
-    return render_template("sgPetStoreIndex.html")
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("sgPetStoreIndex.html",cat=cat)
+    cur.close()
+
 
 @app.route("/sgPetStoreContactUs.html")
 def sgPetStoreContactUs():
-    return render_template("sgPetStoreContactUs.html")
-	
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'SG Pet Store'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("sgPetStoreContactUs.html",cat=cat)
+    cur.close()
+
+@app.route("/PLCIndex.html")
+def PLCHome():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'Pet Loving Center'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PLCIndex.html",cat=cat)
+    cur.close()
+
+@app.route("/PLCContactUs.html")
+def PLCContactUs():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'Pet Loving Center'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PLCContactUs.html",cat=cat)
+    cur.close()
+
+@app.route("/PawsShopIndex.html")
+def PawsShopHome():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PawsShopIndex.html",cat=cat)
+    cur.close()
+
+@app.route("/PawsShopContactUs.html")
+def PawsShopContactUs():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petstore where petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PawsShopContactUs.html",cat=cat)
+    cur.close()
+
 @app.route("/buyheredog/dog/<name>")
 def buydog(name):
     cur = mysql.connection.cursor()
@@ -733,6 +792,42 @@ def sgPetStoreDogs():
     #to include the values
     return render_template("sgPetStoreDogs.html", hdb=hdb, small=small, large=large)
     cur.close()
+
+@app.route("/PLCDogs.html")
+def PLCDogs():
+    #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where HDB = 'HDB' and petStoreId = 'Pet Loving Center'"
+    value = cur.execute(sql)
+    hdb = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'small' and petStoreId = 'Pet Loving Center'"
+    value = cur.execute(sql)
+    small = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'Large' and petStoreId = 'Pet Loving Center'"
+    value = cur.execute(sql)
+    large = cur.fetchall()
+    
+    #to include the values
+    return render_template("PLCDogs.html", hdb=hdb, small=small, large=large)
+    cur.close()
+    
+@app.route("/PawsShopDogs.html")
+def PawsShopDogs():
+    #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where HDB = 'HDB' and petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    hdb = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'small' and petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    small = cur.fetchall()
+    sql = "select * from petStoreAnimal where Size = 'Large' and petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    large = cur.fetchall()
+    
+    #to include the values
+    return render_template("PawsShopDogs.html", hdb=hdb, small=small, large=large)
+    cur.close()
     
 @app.route("/sgPetStoreCats.html")
 def sgPetStoreCats():
@@ -744,40 +839,102 @@ def sgPetStoreCats():
     #to include the values
     return render_template("sgPetStoreCats.html", cat=cat)
     cur.close()
-	
-@app.route("/SG Pet Store/dog/<name>")
-def sgPetStoreDogBreed(name):
+
+@app.route("/PLCCats.html")
+def PLCCats():
+    #insert sql statement to get names of cats
     cur = mysql.connection.cursor()
-    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store'  and breed = '" + name + "'"
+    sql = "select * from petStoreAnimal where petType ='cat' and petStoreId = 'Pet Loving Center'"
     value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("sgPetStoreDogBreed.html", result=result, img=name)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PLCCats.html", cat=cat)
+    cur.close()
+    
+@app.route("/PawsShopCats.html")
+def PawsShopCats():
+    #insert sql statement to get names of cats
+    cur = mysql.connection.cursor()
+    sql = "select * from petStoreAnimal where petType ='cat' and petStoreId = 'Paws Shop'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    #to include the values
+    return render_template("PawsShopCats.html", cat=cat)
     cur.close()
 
 @app.route("/SG Pet Store/buydog/<name>")
 def sgPetStoreDogBreedBuy(name):
     cur = mysql.connection.cursor()
-    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store'  and name = '" + name + "'"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'SG Pet Store'  and name = '" + name + "'"
     value = cur.execute(sql)
     result = cur.fetchall()
-    sql = "SELECT * FROM petstoreanimal where petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
     value = cur.execute(sql)
     others = cur.fetchall()
     return render_template("sgPetStoreDogBreedBuy.html", result=result, others=others,img=name)
     cur.close()
     
-@app.route("/SG Pet Store/buycat/<name>")
-def sgPetStoreCatBreed(name):
+@app.route("/Pet Loving Center/buydog/<name>")
+def PLCDogBreedBuy(name):
     cur = mysql.connection.cursor()
-    sql = "select * from petStoreAnimal where petStoreId = 'SG Pet Store' and name = '" + name + "'"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Loving Center'  and name = '" + name + "'"
     value = cur.execute(sql)
     result = cur.fetchall()
-    sql = "SELECT * FROM petstoreanimal where petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Loving Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
     value = cur.execute(sql)
     others = cur.fetchall()
-    return render_template("sgPetStoreCatBreed.html", result=result,others=others, img=name)
+    return render_template("PLCDogBreedBuy.html", result=result, others=others,img=name)
     cur.close()
+    
+@app.route("/Paws Shop/buydog/<name>")
+def PawsShopDogBreedBuy(name):
+    cur = mysql.connection.cursor()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Paws Shop'  and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Paws Shop' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("PawsShopDogBreedBuy.html", result=result, others=others,img=name)
+    cur.close()
+    
+@app.route("/SG Pet Store/buycat/<name>")
+def sgPetStoreCatBreedBuy(name):
+    cur = mysql.connection.cursor()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'SG Pet Store'  and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='SG Pet Store' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("sgPetStoreCatBreedBuy.html", result=result,others=others, img=name)
+    cur.close()
+    
+@app.route("/Pet Loving Center/buycat/<name>")
+def PLCCatBreedBuy(name):
+    cur = mysql.connection.cursor()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Loving Center'  and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Loving Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("PLCCatBreedBuy.html", result=result,others=others, img=name)
+    cur.close()
+    
+@app.route("/Paws Shop/buycat/<name>")
+def PawsShopCatBreedBuy(name):
+    cur = mysql.connection.cursor()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Paws Shop'  and name = '" + name + "'"
+    value = cur.execute(sql)
+    result = cur.fetchall()
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Paws Shop' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    value = cur.execute(sql)
+    others = cur.fetchall()
+    return render_template("PawsShopCatBreedBuy.html", result=result,others=others, img=name)
+    cur.close()
+
 
 if __name__ =="__main__":
 	#app.debug = True
-	app.run(port=3000, debug = True)
+	app.run()

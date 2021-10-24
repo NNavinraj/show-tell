@@ -48,19 +48,19 @@
     <h3 class="dogsh3" id="small">Small Breeds</h3>
     <div class="container2">
         {% for item in small %}
-        <div class="anchor"><a href="{{item[1]}}/dog/{{item[7]}}"><img src="{{ url_for('static', filename='sgPetStoreDogs/' + item[7] + '1.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
+        <div class="anchor"><a href="{{item[1]}}/buydog/{{item[2]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
         {% endfor %}
     </div>
     <h3 class="dogsh3" id="large">Large Breeds</h3>
     <div class="container2">
         {% for item in large %}
-        <div class="anchor"><a href="{{item[1]}}/dog/{{item[7]}}"><img src="{{ url_for('static', filename='dogs/' + item[7] + '1.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
+        <div class="anchor"><a href="{{item[1]}}/buydog/{{item[2]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
         {% endfor %}
     </div>
     <h3 class="dogsh3" id="hdb">HDB Approved</h3>
     <div class="container2">
         {% for item in hdb %}
-        <div class="anchor"><a href="{{item[1]}}/dog/{{item[7]}}"><img src="{{ url_for('static', filename='dogs/' + item[7] + '1.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
+        <div class="anchor"><a href="{{item[1]}}/buydog/{{item[2]}}"><img src="{{ url_for('static', filename='petstoreanimal/' + item[2] + '.jpg')}}"><p>{{item[2]}}</p><p style="font-size: 20px;">{{item[7]}}</p></a></div>
         {% endfor %}
     </div>
   </div>
