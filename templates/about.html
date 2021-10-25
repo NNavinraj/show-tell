@@ -4,74 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css1.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style1.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 </head>
 <body>
-	<nav>
-		<div class="wrapper">
-		  <div class="logo"><a href={{url_for('home')}}>SG CATS & DOGS</a></div>
-		  <input type="radio" name="slider" id="menu-btn">
-		  <input type="radio" name="slider" id="close-btn">
-		  <ul class="nav-links">
-			<label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
-			<li><a href={{url_for('home')}}>Home</a></li>
-			<li><a href={{url_for('about')}}>About</a></li>
-			<li>
-			  <a href={{url_for('dogs')}} class="desktop-item">Dogs</a>
-			  <input type="checkbox" id="showDrop">
-			  <label for="showDrop" class="mobile-item">Dogs</label>
-			  <ul class="drop-menu">
-				<li><a href="{{url_for('dogs')}}#hdb">HDB Approved</a></li>
-				<li><a href="{{url_for('dogs')}}#small">Small Breed</a></li>
-				<li><a href="{{url_for('dogs')}}#large">Large Breed</a></li>
-			  </ul>
-			</li>
-			<li><a href={{url_for('cats')}}>Cats</a></li>
-			<li>
-			  <a href="#" class="desktop-item">Know Your Breed</a>
-			  <input type="checkbox" id="showDrop">
-			  <label for="showDrop" class="mobile-item">Know Your Breed</label>
-			  <ul class="drop-menu">
-				<li><a href={{url_for('dogclassify')}}>Know Your Dog</a></li>
-				<li><a href={{url_for('catclassify')}}>Know Your Cat</a></li>
-			  </ul>
-			</li>
-			<li><a href={{url_for('doodle')}}>Doodle Game</a></li>
-		  </ul>
-		  <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
-		</div>
+  <nav>
+    <div class="wrapper">
+      <div class="logo"><a href={{url_for('home')}}>SG CATS & DOGS</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href={{url_for('home')}}>Home</a></li>
+        <li><a href={{url_for('about')}}>About</a></li>
+        <li>
+          <a href={{url_for('dogs')}} class="desktop-item">Dogs</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dogs</label>
+          <ul class="drop-menu">
+            <li><a href="{{url_for('dogs')}}#hdb">HDB Approved</a></li>
+            <li><a href="{{url_for('dogs')}}#small">Small Breed</a></li>
+            <li><a href="{{url_for('dogs')}}#large">Large Breed</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('cats')}}>Cats</a></li>
+        <li>
+          <a href="#" class="desktop-item">Know Your Breed</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Know Your Breed</label>
+          <ul class="drop-menu">
+            <li><a href={{url_for('dogclassify')}}>Know Your Dog</a></li>
+            <li><a href={{url_for('catclassify')}}>Know Your Cat</a></li>
+          </ul>
+        </li>
+        <li><a href={{url_for('doodle')}}>Doodle Game</a></li>
+      </ul>
+      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
   </nav>
   <div class="main">
     <div class="topspace"></div>
     <div class="body-text">
-      <div class="title">Contact Us</div>
-      <p style ="font-size: xx-large;">Phone : 88776368</p>
-      <p style ="font-size: xx-large;">Email : SGPetStore@gmail.com</p>
-      <p style ="font-size: xx-large;">Whatapp :<a href= "shorturl.at/cpsCL"> Click to whatapp us</a></p>
-       </div>
-    </div> 
- <div class ="centerbody">  
-     <h1>SG PET STORE</h1>
-         <div class ="centerbody">  
-    We are a pet shop Singapore that sells puppies. We are partners with the most experienced professional breeders and trainers in Singapore and the USA. These are responsible breeders who work for the love of dogs. We have hard-working personnel and the most complete facilities in Singapore. We can boast of the quality of our dogs and the quality of our services.
-    </div><br>
-    <div class= "acenter"><img src= "static/dogs/small.jpg",  width="450" height="500"></div>
-     <div class ="centerbody">  
-    Feel free to contact us. Ask your questions about your new pet, and seek some advice on his training, food, and exercise regimen. We would be glad to prepare you for the new family member that you will be taking home with you. We want you to enjoy having a good pet and we want to be sure that your new pet will have a comfortable life with you.
-</div>
     </div>
-    <br>
-    
-<div class = "footer">
-    <div class ="title">MOST POPULAR PET</div>
-       <a href="dogs.html"><img src="static/dogs/Dachshund2.jpg"></a>
-       <a href="cats.html"><img src="static/dogs/golden retriever2.jpg"></a>
-       <a href="dogs.html"><img src="static/dogs/labrador retriever2.jpg"></a>
+    <h3 class ="dogsh3">Objective of this project</h3>
+    <h3 class="dogsh3">The primary objective of this project is to extend the use of image processing and annotation to mimic kids doing show-and-tell activities on a web-based platform. The usage of a machine show-and-tell in our case will be of use to both animal shelters and animal owners that seek to learn and identify common household animals in Singapore. This is in line with one common mission value held by SPCA and many other animal shelters, of which is to advance animal safety and well-being through general education and public awareness.</h3>
 
-</div>
-
+    <div class="container1">
+    <p class="dogsh3">Team Leader : Navin </p>
+    <p class="dogsh3">Team Member : Jax </p>
+    <p class="dogsh3">Team Member : Wan Xin </p>
+    <p class="dogsh3">Team Member : Terrance </p>
+    <p class="dogsh3">Team Member : Yang Shun </p>    
+    </div>
   </div>
 </body>
 </html>
