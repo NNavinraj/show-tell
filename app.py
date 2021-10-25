@@ -84,7 +84,7 @@ def getPrediction(filename):
     yhat = model1.predict(image)
     label = decode_predictions(yhat)
     label = label[0][0]
-    print('%s (%.2f%%)' % (label[1], label[2]*100))
+
     return label[1], label[2]*100
 
 def getCatPrediction(filename):
@@ -101,7 +101,6 @@ def getCatPrediction(filename):
     yhat = model3.predict(image)
     label = decode_predictions(yhat)
     label = label[0][0]
-    print('%s (%.2f%%)' % (label[1], label[2]*100))
     return label[1], label[2]*100
 
 
@@ -132,7 +131,6 @@ def get_config(config_path):
 
 def load_yolov3model(configpath,weightspath):
     # load our YOLO object detector trained on COCO dataset (80 classes)
-    print("[INFO] loading YOLO from disk...")
     net = cv2.dnn.readNetFromDarknet(configpath, weightspath)
     return net
 
@@ -222,11 +220,8 @@ def dogclassify():
             net.setInput(blob)
             start = time.time()
             layerOutputs = net.forward(ln)
-            print(layerOutputs)
             end = time.time()
             
-            # show timing information on YOLO
-            print("[INFO] YOLO took {:.6f} seconds".format(end - start))
             
             # initialize our lists of detected bounding boxes, confidences, and
             # class IDs, respectively
@@ -241,9 +236,8 @@ def dogclassify():
                     # extract the class ID and confidence (i.e., probability) of
                     # the current object detection
                     scores = detection[5:]
-                    # print(scores)
+
                     classID = np.argmax(scores)
-                    # print(classID)
                     confidence = scores[classID]
                     
                     # filter out weak predictions by ensuring the detected
@@ -284,9 +278,7 @@ def dogclassify():
                                 color = [int(c) for c in COLORS[classIDs[i]]]
                                 y = y - 10 if y - 10 > 10 else y + 15
                                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-                                
-                                print(boxes)
-                                print(classIDs)
+                            
                                 
                                 img = request.files["imagefile"]
                                 filename = secure_filename(img.filename)
@@ -462,7 +454,7 @@ def catclassify():
             net.setInput(blob)
             start = time.time()
             layerOutputs = net.forward(ln)
-            print(layerOutputs)
+
             end = time.time()
         
             # initialize our lists of detected bounding boxes, confidences, and
@@ -478,9 +470,8 @@ def catclassify():
                     # extract the class ID and confidence (i.e., probability) of
                     # the current object detection
                     scores = detection[5:]
-                    # print(scores)
+
                     classID = np.argmax(scores)
-                    # print(classID)
                     confidence = scores[classID]
                     
                     # filter out weak predictions by ensuring the detected
@@ -521,9 +512,7 @@ def catclassify():
                                 color = [int(c) for c in COLORS[classIDs[i]]]
                                 y = y - 10 if y - 10 > 10 else y + 15
                                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-                                
-                                print(boxes)
-                                print(classIDs)
+
                                 
                                 img = request.files["imagefile"]
                                 filename = secure_filename(img.filename)
@@ -674,7 +663,6 @@ def doodle():
         x = Image.open('temp.png').convert('L')
         # resize input image to 28x28
         x = x.resize((28, 28))
-        
         model = conv
         x = np.expand_dims(x, axis=0)
         x = np.reshape(x, (28, 28, 1))
@@ -691,8 +679,7 @@ def doodle():
         val = model.predict(np.array([x]))
         pred = ANIMALS[np.argmax(val)]
         classes = ["Bird", "Cat", "Dog", "Rabbit"]
-        print (pred)
-        print (list(val[0]))
+
         return render_template("doodle.html", preds=list(val[0]), classes=json.dumps(classes), chart=True, putback=request.form["payload"],pred=pred)
 
 #SG PET STORE INDEX 
@@ -943,4 +930,4 @@ def PawsShopCatBreedBuy(name):
 
 if __name__ =="__main__":
 	#app.debug = True
-	app.run(debug= True)
+	app.run()
