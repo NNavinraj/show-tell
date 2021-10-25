@@ -519,6 +519,7 @@ def catclassify():
                                 
                                 # draw a bounding box rectangle and label on the image
                                 color = [int(c) for c in COLORS[classIDs[i]]]
+                                y = y - 10 if y - 10 > 10 else y + 15
                                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
                                 
                                 print(boxes)
@@ -535,24 +536,28 @@ def catclassify():
         #get the image of the dog for prediction
         
         # load our input image and grab its spatial dimensions
-        #img1 = request.files["imagefile"].read()
-        img1 = Image.open(io.BytesIO(img1))
-        npimg=np.array(img1)
-        image=npimg.copy()
-        image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        res=get_predection(image,nets,Lables,Colors)
-        image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
+        yolo = True
 
-        cv2.waitKey()
-        cv2.imwrite("filename1.png", res)
-        np_img=Image.fromarray(image)
-        img_encoded=image_to_byte_array(np_img)  
-        base64_bytes = base64.b64encode(img_encoded).decode("utf-8")  
+        try:
+            #img1 = request.files["imagefile"].read()
+            img1 = Image.open(io.BytesIO(img1))
+            npimg=np.array(img1)
+            image=npimg.copy()
+            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            res=get_predection(image,nets,Lables,Colors)
+            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
+
+            cv2.waitKey()
+            cv2.imwrite("filename1.png", res)
+            np_img=Image.fromarray(image)
+            img_encoded=image_to_byte_array(np_img)  
+            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")     
+        except:
+            yolo = False
         
         var = gTTS(catName, lang = 'en')
         var.save("static/catsound.mp3")
-    
     
     
     # generate a description for an image
@@ -604,9 +609,10 @@ def catclassify():
     # generate description
     description1 = generate_desc(model, tokenizer, photo, max_length)
     description = cat[0][0] + ' is ' + description1
-
-    return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
-
+    if yolo:
+        return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
+    else:
+        return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
 
 @app.route("/dogs.html")
 def dogs():
@@ -937,4 +943,4 @@ def PawsShopCatBreedBuy(name):
 
 if __name__ =="__main__":
 	#app.debug = True
-	app.run()
+	app.run(debug= True)

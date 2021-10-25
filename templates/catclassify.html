@@ -9,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 </head>
+<script>
+  function playAudio() {
+    var audioFile = new Audio('static/catsound.mp3?' + new Date().getTime());
+    audioFile.play()
+    }
+</script>
 <body>
   <nav>
     <div class="wrapper">
@@ -52,14 +58,16 @@
             <input class="btn btn-outline-primary" type="submit" value="Predict Image">
         </form>
         <div id="loader"></div>
-        
+        {% if img_path %}
         {% for item in cat %}
         <div class="breedhighlight" id="content">
           <img src="data:image/png;base64,{{ img_path }}" width ="500px">
           
           <div style="text-align: justify;">
             <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}</h3>
-            <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio>
+            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio> -->
+            <script>playAudio()</script>
+            <button type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play</button>
             <p>{{description}}</p>
             <p><strong>Description: </strong><br>{{item[1]|safe}}</p>
             <p><strong>Average Life Span: </strong>{{item[2]|safe}}</p><br>
@@ -69,6 +77,27 @@
           </div>
         </div>
         {% endfor %}
+        {% endif %}
+        {% if noyolo %}
+        {% for item in cat %}
+        <div class="breedhighlight" id="content">
+          <img src="{{ noyolo }}" width ="500px">
+          
+          <div style="text-align: justify;">
+            <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}</h3>
+            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio> -->
+            <script>playAudio()</script>
+            <button type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play</button>
+            <p>{{description}}</p>
+            <p><strong>Description: </strong><br>{{item[1]|safe}}</p>
+            <p><strong>Average Life Span: </strong>{{item[2]|safe}}</p><br>
+            <p>More info at this <a href="cat/{{item[0]}}">page</a></p>
+            <button type="button"><a href="buyherecat/cat/{{item[0]}}">Buy here!</button></a>
+
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
         
   </div>
   <script type="text/javascript">// <![CDATA[
