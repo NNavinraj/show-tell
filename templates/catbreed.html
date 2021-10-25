@@ -53,6 +53,7 @@
           <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}'s Description</h3>
           <p>Average Lifespan: {{item[1]|safe}}</p>
           <p>{{item[3]|safe}}</p>
+          <button type="button"><a href="{{url_for('buycat', name = item[0])}}">Buy here!</button></a>
         </div>
         <img src="{{url_for('static', filename='cats/'+img+'1.jpg')}}" width="400px"/>
       </div>
