@@ -714,7 +714,7 @@ def sgPetStoreContactUs():
 def PLCHome():
     #insert sql statement to get names of cats
     cur = mysql.connection.cursor()
-    sql = "select * from petstore where petStoreId = 'Pet Loving Center'"
+    sql = "select * from petstore where petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     cat = cur.fetchall()
     #to include the values
@@ -725,7 +725,7 @@ def PLCHome():
 def PLCContactUs():
     #insert sql statement to get names of cats
     cur = mysql.connection.cursor()
-    sql = "select * from petstore where petStoreId = 'Pet Loving Center'"
+    sql = "select * from petstore where petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     cat = cur.fetchall()
     #to include the values
@@ -794,13 +794,13 @@ def sgPetStoreDogs():
 def PLCDogs():
     #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
     cur = mysql.connection.cursor()
-    sql = "select * from petStoreAnimal where HDB = 'HDB' and petStoreId = 'Pet Loving Center'"
+    sql = "select * from petStoreAnimal where HDB = 'HDB' and petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     hdb = cur.fetchall()
-    sql = "select * from petStoreAnimal where Size = 'small' and petStoreId = 'Pet Loving Center'"
+    sql = "select * from petStoreAnimal where Size = 'small' and petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     small = cur.fetchall()
-    sql = "select * from petStoreAnimal where Size = 'Large' and petStoreId = 'Pet Loving Center'"
+    sql = "select * from petStoreAnimal where Size = 'Large' and petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     large = cur.fetchall()
     
@@ -841,7 +841,7 @@ def sgPetStoreCats():
 def PLCCats():
     #insert sql statement to get names of cats
     cur = mysql.connection.cursor()
-    sql = "select * from petStoreAnimal where petType ='cat' and petStoreId = 'Pet Loving Center'"
+    sql = "select * from petStoreAnimal where petType ='cat' and petStoreId = 'Pet Lovers Center'"
     value = cur.execute(sql)
     cat = cur.fetchall()
     #to include the values
@@ -871,13 +871,13 @@ def sgPetStoreDogBreedBuy(name):
     return render_template("sgPetStoreDogBreedBuy.html", result=result, others=others,img=name)
     cur.close()
     
-@app.route("/Pet Loving Center/buydog/<name>")
+@app.route("/Pet Lovers Center/buydog/<name>")
 def PLCDogBreedBuy(name):
     cur = mysql.connection.cursor()
-    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Loving Center'  and name = '" + name + "'"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Lovers Center'  and name = '" + name + "'"
     value = cur.execute(sql)
     result = cur.fetchall()
-    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Loving Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Lovers Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
     value = cur.execute(sql)
     others = cur.fetchall()
     return render_template("PLCDogBreedBuy.html", result=result, others=others,img=name)
@@ -907,13 +907,13 @@ def sgPetStoreCatBreedBuy(name):
     return render_template("sgPetStoreCatBreedBuy.html", result=result,others=others, img=name)
     cur.close()
     
-@app.route("/Pet Loving Center/buycat/<name>")
+@app.route("/Pet Lovers Center/buycat/<name>")
 def PLCCatBreedBuy(name):
     cur = mysql.connection.cursor()
-    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Loving Center'  and name = '" + name + "'"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petstoreanimal.petStoreId = 'Pet Lovers Center'  and name = '" + name + "'"
     value = cur.execute(sql)
     result = cur.fetchall()
-    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Loving Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
+    sql = "select IC, petStoreAnimal.petStoreID, petStoreAnimal.Name, PetType, DateOfBirth, Gender, Breed, Price, Size, HDB, petstore.telephone, petstore.email, petstore.address from petStoreAnimal join petstore on petstoreanimal.petStoreID = petstore.petStoreID where petStoreAnimal.petStoreID ='Pet Lovers Center' and name not in  (select name from petStoreAnimal where name = '" + name + "') and breed in ( select breed from petStoreAnimal where name ='" + name + "')"
     value = cur.execute(sql)
     others = cur.fetchall()
     return render_template("PLCCatBreedBuy.html", result=result,others=others, img=name)
@@ -934,4 +934,4 @@ def PawsShopCatBreedBuy(name):
 
 if __name__ =="__main__":
 	#app.debug = True
-	app.run()
+	app.run(debug= True)

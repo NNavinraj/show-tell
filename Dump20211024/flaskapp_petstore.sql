@@ -37,7 +37,7 @@ CREATE TABLE `petstore` (
 
 LOCK TABLES `petstore` WRITE;
 /*!40000 ALTER TABLE `petstore` DISABLE KEYS */;
-INSERT INTO `petstore` VALUES ('Paws Shop','Block 21 Clementi Drive #02-34 Singapore(123121)','9888 0012','Sales@Paws.com'),('Pet Loving Center','Block 16 Orchard Road #01-01 Singapore(20000)','9123 4567','Sales@petlovingcenter.com'),('SG Pet Store','Block 300 Bukit Timah Ave 5 #01-88 Singapore(10000)','8899 2219','Sales@sgpetstore.com');
+INSERT INTO `petstore` VALUES ('Paws Shop','Block 21 Clementi Drive #02-34 Singapore(123121)','9888 0012','Sales@Paws.com'),('Pet Lovers Center','11 Yishun Industrial Street 1, #07-91/92','6305 9098','-'),('SG Pet Store','Block 300 Bukit Timah Ave 5 #01-88 Singapore(10000)','8899 2219','Sales@sgpetstore.com');
 /*!40000 ALTER TABLE `petstore` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-24 19:56:27
+-- Dump completed on 2021-10-25 22:24:02
