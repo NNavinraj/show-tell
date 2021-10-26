@@ -5,6 +5,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
 nav{
   position: fixed;
   z-index: 99;
@@ -219,6 +220,8 @@ nav .wrapper{
     border-radius: 5px;
     font-size: 18px;
   }
+
+
   .mega-box{
     position: static;
     top: 65px;

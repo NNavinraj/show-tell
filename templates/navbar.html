@@ -1,0 +1,129 @@
+<!-- Top Bar Start -->
+<div class="top-bar">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 col-md-12">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>Pet<span>Heaven</span></h1>
+                        <!-- <img src="img/logo.jpg" alt="Logo"> -->
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7 d-none d-lg-block">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="top-bar-item">
+                            <div class="top-bar-icon">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <div class="top-bar-text">
+                                <h3>Opening Hour</h3>
+                                <p>Mon - Fri, 8:00 - 9:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="top-bar-item">
+                            <div class="top-bar-icon">
+                                <i class="fa fa-phone-alt"></i>
+                            </div>
+                            <div class="top-bar-text">
+                                <h3>Call Us</h3>
+                                <p>+65 6758 0732</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="top-bar-item">
+                            <div class="top-bar-icon">
+                                <i class="far fa-envelope"></i>
+                            </div>
+                            <div class="top-bar-text">
+                                <h3>Email Us</h3>
+                                <p>support@catheaven.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<head>
+    <link href="/static/img/favicon.ico" rel="icon">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+    
+    <!-- CSS Libraries -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    
+    <!-- Template Stylesheet -->
+    <link href="/static/css/style.css" rel="stylesheet">
+    
+    
+
+
+<script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+
+</head>
+
+<div class="nav-bar">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <a href="#" class="navbar-brand">MENU</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav mr-auto">
+                    <a href={{url_for('home')}} class="nav-item nav-link active">Home</a>
+                    <a href={{url_for('about')}}  class="nav-item nav-link">About</a>
+                     <div class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" data-toggle="dropdown">Dogs</a>
+                     <div class="dropdown-menu">
+                         <a href="{{url_for('dogs')}}#hdb" class="dropdown-item">HDB Approved</a>
+                         <a href="{{url_for('dogs')}}#small" class="dropdown-item">Small Breed</a>
+                         <a href="{{url_for('dogs')}}#large" class="dropdown-item">Large Breed</a>
+                      </div>  
+                     </div>
+                     
+                    <a href={{url_for('cats')}} class="nav-item nav-link">Cats</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Know Your Breed</a>
+                        <div class="dropdown-menu">
+                            <a href={{url_for('dogclassify')}} class="dropdown-item">Know Your Dog</a>
+                            <a href={{url_for('catclassify')}} class="dropdown-item">Know Your Cat</a>
+                          
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="ml-auto">
+                    <a href={{url_for('doodle')}} class="btn btn-custom" href="#">Doodle Game</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/static/lib/easing/easing.min.js"></script>
+<script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/static/lib/waypoints/waypoints.min.js"></script>
+<script src="/static/lib/counterup/counterup.min.js"></script>
+
+<!-- Contact Javascript File -->
+<script src="/static/mail/jqBootstrapValidation.min.js"></script>
+<script src="/static/mail/contact.js"></script>
+
+<!-- Template Javascript -->
+<script src="/static/js/main.js"></script>

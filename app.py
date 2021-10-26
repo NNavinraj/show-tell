@@ -37,6 +37,10 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route("/navbar.html")
+def navBarNew():
+    return render_template("navbar.html")
+
 #DOG CLASSIFICATION CODE
 #IMPORTS
 import cv2
