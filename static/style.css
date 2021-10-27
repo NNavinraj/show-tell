@@ -50,6 +50,7 @@ nav .wrapper{
 .nav-links .mobile-item{
   display: none;
 }
+/*
 .nav-links .drop-menu{
   position: absolute;
   background: #242526;
@@ -74,6 +75,7 @@ nav .wrapper{
   font-weight: 400;
   border-radius: 0px;
 }
+*/
 .mega-box{
   position: absolute;
   left: 0;
@@ -172,6 +174,7 @@ nav .wrapper{
   #close-btn:checked ~ .bttn.menu-btn{
     display: block;
   }
+/*
   .nav-links li{
     margin: 15px 10px;
   }
@@ -219,6 +222,7 @@ nav .wrapper{
     border-radius: 5px;
     font-size: 18px;
   }
+*/
   .mega-box{
     position: static;
     top: 65px;

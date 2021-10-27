@@ -5,6 +5,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
 nav{
   position: fixed;
   z-index: 99;
@@ -257,6 +258,7 @@ nav .wrapper{
 nav input{
   display: none;
 }
+
 .main {
   display: flex;
   flex-direction: column;
