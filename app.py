@@ -41,6 +41,10 @@ def about():
 def navBarNew():
     return render_template("navbar.html")
 
+@app.route("/footer.html")
+def footerNew():
+    return render_template("footer.html")
+
 #DOG CLASSIFICATION CODE
 #IMPORTS
 import cv2
