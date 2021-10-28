@@ -38,3 +38,5 @@ KNOWN ERRORS/BUGS
 >if you are getting a yaml error asking for a Loader() function, make sure that your PyYaml version == 5.4.1 by typing the command: pip install PyYAML==5.4.1
 
 >TTS only saves the first result and not subsequent ones. need to refresh the page to get a new TTS audio file.
+
+> if you are getting a Transpose the weights (except for convolutional) is not implemented in function 'cv::dnn::darknet::ReadDarknetFromWeightsStream' error, you have to re-download yolov3.weights file and replace your existing yolov3.weights file in your directory. 
