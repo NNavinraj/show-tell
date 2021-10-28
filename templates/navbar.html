@@ -84,16 +84,11 @@
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto">
-                    <a href={{url_for('home')}} class="nav-item nav-link active">Home</a>
+                    <a href={{url_for('home')}} class="nav-item nav-link ">Home</a>
                     <a href={{url_for('about')}}  class="nav-item nav-link">About</a>
-                     <div class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" data-toggle="dropdown">Dogs</a>
-                     <div class="dropdown-menu">
-                         <a href="{{url_for('dogs')}}#hdb" class="dropdown-item">HDB Approved</a>
-                         <a href="{{url_for('dogs')}}#small" class="dropdown-item">Small Breed</a>
-                         <a href="{{url_for('dogs')}}#large" class="dropdown-item">Large Breed</a>
-                      </div>  
-                     </div>
+                    
+                     <a href={{url_for('dogs')}} class="nav-item nav-link ">Dogs</a>
+
                      
                     <a href={{url_for('cats')}} class="nav-item nav-link">Cats</a>
                     <div class="nav-item dropdown">
