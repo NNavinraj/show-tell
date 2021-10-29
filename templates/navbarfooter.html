@@ -68,7 +68,17 @@
     <link href="/static/css/style.css" rel="stylesheet">
     
     
+{% set navigation_bar = [
+    ('/', 'index', 'Home'),
+    ('/about.html', 'about', 'About'),
+    ('/dogs.html', 'dogs', 'Dogs'),
+	('/cats.html', 'cats', 'Cats'),
+	('/dogclassify.html', 'dogclassify', 'Know Your Dog'),
+	('/catclassify.html', 'catclassify', 'Know Your Cat'),
+	
+] -%}
 
+{% set active_page = active_page|default('index') -%}
 
 <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 
@@ -84,8 +94,18 @@
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto">
-                    <a href={{url_for('home')}} class="nav-item nav-link ">Home</a>
-                    <a href={{url_for('about')}}  class="nav-item nav-link">About</a>
+				
+				 {% for href, id, caption in navigation_bar %}
+                    <a {% if id == active_page %} class=" nav-item nav-link active"{% endif %} href="{{ href|e }}" class="nav-item nav-link ">{{ caption|e }}</a>
+					{% endfor %}
+					
+						 {% for href, id, caption in navigation_bar %}
+					{% endfor %}
+					
+					<!--
+						<a href={{url_for('home')}} class="nav-item nav-link ">{{ caption|e }}</a>
+						
+                    <a href={{url_for('about')}}  class="nav-item nav-link " >About</a>
                     
                      <a href={{url_for('dogs')}} class="nav-item nav-link ">Dogs</a>
 
@@ -99,8 +119,9 @@
                           
                         </div>
                     </div>
-                
+                	-->
                 </div>
+			
                 <div class="ml-auto">
                     <a href={{url_for('doodle')}} class="btn btn-custom" href="#">Doodle Game</a>
                 </div>

@@ -29,15 +29,10 @@
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 </head>
 
-<div id="nav-placeholder">
+{% extends "navbarfooter.html" %}
+{% set active_page = "dogs" %}
+{% block content %}
 
-</div>
-
-<script>
-$(function(){
-  $("#nav-placeholder").load("navbar.html");
-});
-</script>
 <body>
 
 
@@ -204,15 +199,7 @@ $(function(){
     </div>
   </div>
   -->
-  <div id="footer-placeholder">
-
-  </div>
-
-  <script>
-  $(function(){
-    $("#footer-placeholder").load("footer.html");
-  });
-  </script>
+{% endblock %}
   <!--end of Navigation bar-->
 </body>
  <!-- JavaScript Libraries -->

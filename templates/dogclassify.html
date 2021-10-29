@@ -34,16 +34,10 @@
     }
 </script>
 
-<div id="nav-placeholder">
 
-</div>
-
-<script>
-
-$(document).ready(function(){
-    $("#nav-placeholder").load("navbar.html");
-});
-</script>
+{% extends "navbarfooter.html" %}
+{% set active_page = "dogclassify" %}
+{% block content %}
 
 
 <body>
@@ -209,18 +203,12 @@ $(document).ready(function(){
     }
     
   // ]]></script>    
-
+{% endblock %}
 </body>
 </div>
-<div id="footer-placeholder">
 
-</div>
 
-<script>
-$(function(){
-  $("#footer-placeholder").load("footer.html");
-});
-</script>
+
 <!--end of Navigation bar-->
 
 </html>

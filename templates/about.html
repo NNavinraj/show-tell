@@ -21,19 +21,11 @@
 
 
 </head>
+
+{% extends "navbarfooter.html" %}
+{% set active_page = "about" %}
+{% block content %}
 <body>
-
-<!--Navigation bar-->
-<div id="nav-placeholder">
-
-</div>
-
-<script>
-$(function(){
-  $("#nav-placeholder").load("navbar.html");
-});
-</script>
-<!--end of Navigation bar-->
 
 
 
@@ -143,18 +135,8 @@ $(function(){
     </div>
     </div>
    </div>
+    {% endblock %}
 </body>
-<!--Navigation bar-->
-<div id="footer-placeholder">
-
-</div>
-
-<script>
-$(function(){
-  $("#footer-placeholder").load("footer.html");
-});
-</script>
-<!--end of Navigation bar-->
 
 </html>
 

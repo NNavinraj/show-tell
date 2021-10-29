@@ -32,15 +32,9 @@
     }
 </script>
 
-<div id="nav-placeholder">
-
-</div>
-
-<script>
-$(function(){
-  $("#nav-placeholder").load("navbar.html");
-});
-</script>
+{% extends "navbarfooter.html" %}
+{% set active_page = "catclassify" %}
+{% block content %}
 <body>
  
   <div style="justify-content: center;" class="main">
@@ -201,18 +195,11 @@ $(function(){
       document.getElementById("content").style.display = "none";  
     }
   // ]]></script> 
+  {% endblock %}
 </body>
 
 </div>
-<div id="footer-placeholder">
 
-</div>
-
-<script>
-$(function(){
-  $("#footer-placeholder").load("footer.html");
-});
-</script>
 
  <!-- JavaScript Libraries -->
  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
