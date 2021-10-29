@@ -29,17 +29,15 @@
 </head>
 
 
+
+{% extends "navbarfooter.html" %}
+
+{% block content %}
 <body>
 
-<div id="include"></div>
 
- <script>
-        window.onload = function(){
-            $.get("inc.html", function(data){
-                $("#nav-placeholder").html(data);
-            })
-        }
-    </script>
+	
+
 
   <div class="main">
 
@@ -71,8 +69,8 @@
                       <p>
                       {{item[3]|safe}}
                       <ul>
-                      <li><i class="fas fa-paw"></i> Average Life Span: {{item[1]|safe}}</li>
-                      <li><i class="fas fa-paw"></i> Size: {{item[2]|safe}}</li>
+                      <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[1]|safe}}</li>
+                      <li><i class="fas fa-paw"></i> <b>Size: </b>{{item[2]|safe}}</li>
                       <button class="btn btn-custom" onclick="location.href='{{url_for('buydog', name = item[0])}}'"  type="button">Buy Now!</button>
 
                       </ul>
@@ -134,6 +132,8 @@
       {% endfor %}
     </div>
   </div>
+  
+{% endblock %}
 
 </body>
 <div id="footer-placeholder">
