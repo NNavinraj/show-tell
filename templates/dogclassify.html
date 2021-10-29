@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Know Your Dog</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 
@@ -55,17 +55,28 @@
 		   <form class="p-3 text-center upload" action='/dogclassify.html', method="post" enctype="multipart/form-data" onsubmit="loading();">
 		<div class="input-group mb-3">
      <input class="form-control"  type ="file" name="imagefile">
+	 			
     <div >
-         
+         	 	
+			
      </div>
+	
 		</div>
-		 <input class="btn btn-custom" type="submit" value="Predict Image">
+
+		 <input onclick="$('#loading').show();$('#submitButton').hide();$('#dogLoading').show();" class="btn btn-custom" id="submitButton" type="submit" value="Predict Image">
+		  <div id="loading" style="display:none;">
+		 
+            <img src="static/img/loadingdog.gif" alt="" />	
+
+			</div>
+			<span id="dogLoading" style="display:none;position:absolute;left:0;right:0;margin-left: auto;margin-right:0;text-align:center;">Loading . . .</span>
+
 			</form>
-			
-			
+           
+
 			
 			   <div id="loader"></div>
-		
+
 			<div class="about">
 				    {% if img_path %}
 				{% for item in description %}
@@ -205,6 +216,7 @@
   // ]]></script>    
 {% endblock %}
 </body>
+
 </div>
 
 

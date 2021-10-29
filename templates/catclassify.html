@@ -54,11 +54,18 @@
 		<div class="input-group mb-3">
      <input class="form-control"  type ="file" name="imagefile">
     <div >
-         
+          	
      </div>
 		</div>
-		 <input class="btn btn-custom" type="submit" value="Predict Image">
+		 <input onclick="$('#loading').show();$('#submitButton').hide();$('#catLoading').show();" id="submitButton" class="btn btn-custom" type="submit" value="Predict Image">
+		  <div id="loading" style="display:none;">>
+		 <img src="static/img/loadingcat.gif" alt="" />	
+
+		 	</div>
 			</form>
+			 <span id="catLoading" style="position:absolute;left:0;right:0;margin-left: auto;margin-right:0;text-align:center;display:none;">Loading . . .</span>
+			 
+	
 		
         <div id="loader"></div>
 		
