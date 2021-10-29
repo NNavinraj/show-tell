@@ -89,15 +89,17 @@ $(function(){
 						 <button class="btn btn-custom" type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
 						 </br>
 						 </br>
+						  <h2><b>"{{description}}"</b></h2>
 					   </div>
                        <div class="about-content">
                            <p> {{item[1]|safe}}</p>
                            <ul>
-                               <li><i class="fas fa-paw"></i> Average Life Span: {{item[2]|safe}}</li>
-                              
+                               <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[2]|safe}}</li>
+
+                                 
                            </ul>
 						         <button class="btn btn-custom" onclick="location.href='cat/{{item[0]}}'" href="cat/{{item[0]}}">Discover More</button>
-								 <button class="btn btn-custom" onclick="location.href='buyheredog/cat/{{item[0]}}'" href="buyheredog/cat/{{item[0]}}" type="button">View Availability</button>
+								 <button class="btn btn-custom" onclick="location.href='buyherecat/cat/{{item[0]}}'" href="buyherecat/cat/{{item[0]}}" type="button">View Availability</button>
                        </div>
                    </div>
                </div>
@@ -128,15 +130,18 @@ $(function(){
 						 <button class="btn btn-custom" type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
 						 </br>
 						 </br>
+						 <h2><b>"{{description}}"</b></h2>
 					   </div>
                        <div class="about-content">
                            <p> {{item[1]|safe}}</p>
                            <ul>
-                               <li><i class="fas fa-paw"></i> Average Life Span: {{item[2]|safe}}</li>
+                               <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[2]|safe}}</li>
+			
+
                               
                            </ul>
 								<button class="btn btn-custom" onclick="location.href='cat/{{item[0]}}'" href="cat/{{item[0]}}">Discover More</button>
-								 <button class="btn btn-custom" onclick="location.href='buyheredog/cat/{{item[0]}}'" href="buyheredog/cat/{{item[0]}}" type="button">View Availability</button>
+								 <button class="btn btn-custom" onclick="location.href='buyherecat/cat/{{item[0]}}'" href="buyherecat/cat/{{item[0]}}" type="button">View Availability</button>
                        </div>
                    </div>
                </div>
