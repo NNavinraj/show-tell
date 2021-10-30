@@ -68,7 +68,17 @@
     <link href="/static/css/style.css" rel="stylesheet">
     
     
+{% set navigation_bar = [
+    ('/', 'index', 'Home'),
+    ('/about.html', 'about', 'About'),
+    ('/dogs.html', 'dogs', 'Dogs'),
+	('/cats.html', 'cats', 'Cats'),
+	('/dogclassify.html', 'dogclassify', 'Know Your Dog'),
+	('/catclassify.html', 'catclassify', 'Know Your Cat'),
+	
+] -%}
 
+{% set active_page = active_page|default('index') -%}
 
 <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
 
@@ -84,8 +94,18 @@
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto">
-                    <a href={{url_for('home')}} class="nav-item nav-link ">Home</a>
-                    <a href={{url_for('about')}}  class="nav-item nav-link">About</a>
+				
+				 {% for href, id, caption in navigation_bar %}
+                    <a {% if id == active_page %} class=" nav-item nav-link active"{% endif %} href="{{ href|e }}" class="nav-item nav-link ">{{ caption|e }}</a>
+					{% endfor %}
+					
+						 {% for href, id, caption in navigation_bar %}
+					{% endfor %}
+					
+					<!--
+						<a href={{url_for('home')}} class="nav-item nav-link ">{{ caption|e }}</a>
+						
+                    <a href={{url_for('about')}}  class="nav-item nav-link " >About</a>
                     
                      <a href={{url_for('dogs')}} class="nav-item nav-link ">Dogs</a>
 
@@ -99,8 +119,9 @@
                           
                         </div>
                     </div>
-                
+                	-->
                 </div>
+			
                 <div class="ml-auto">
                     <a href={{url_for('doodle')}} class="btn btn-custom" href="#">Doodle Game</a>
                 </div>
@@ -111,6 +132,63 @@
 
 {% block content %}
     {% endblock %}
+	
+	
+	
+ <div class="footer">
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-3 col-md-6">
+                 <div class="footer-contact">
+                     <h2>Get In Touch</h2>
+                     <p><i class="fa fa-map-marker-alt"></i>461 Clementi Rd, Singapore 599491</p>
+                     <p><i class="fa fa-phone-alt"></i>+65 6758 0732</p>
+                     <p><i class="fa fa-envelope"></i>support@petheaven.com</p>
+                     <div class="footer-social">
+                         <a class="btn" href=""><i class="fab fa-twitter"></i></a>
+                         <a class="btn" href=""><i class="fab fa-facebook-f"></i></a>
+                         <a class="btn" href=""><i class="fab fa-youtube"></i></a>
+                         <a class="btn" href=""><i class="fab fa-instagram"></i></a>
+                         <a class="btn" href=""><i class="fab fa-linkedin-in"></i></a>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-lg-3 col-md-6">
+                 <div class="footer-link">
+                     <h2>Popular Links</h2>
+                     <a href="">About Us</a>
+                     <a href="">Contact Us</a>
+                     <a href="">Our Service</a>
+                     <a href="">Service Points</a>
+                     <a href="">Pricing Plan</a>
+                 </div>
+             </div>
+             <div class="col-lg-3 col-md-6">
+                 <div class="footer-link">
+                     <h2>Useful Links</h2>
+                     <a href="">Terms of use</a>
+                     <a href="">Privacy policy</a>
+                     <a href="">Cookies</a>
+                     <a href="">Help</a>
+                     <a href="">FQAs</a>
+                 </div>
+             </div>
+             <div class="col-lg-3 col-md-6">
+                 <div class="footer-newsletter">
+                     <h2>Newsletter</h2>
+                     <form>
+                         <input class="form-control" placeholder="Full Name">
+                         <input class="form-control" placeholder="Email">
+                         <button class="btn btn-custom">Submit</button>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div class="container copyright">
+         <p>&copy; <a href="#">PetHeaven</a>, All Right Reserved. Designed By <a href="https://htmlcodex.com">HTML Codex</a></p>
+     </div>
+ </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>

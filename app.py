@@ -44,6 +44,10 @@ def navBarNew():
 @app.route("/footer.html")
 def footerNew():
     return render_template("footer.html")
+	
+@app.route("/navbarfooter.html")
+def navBarFooterNew():
+    return render_template("navbarfooter.html")
 
 #DOG CLASSIFICATION CODE
 #IMPORTS
@@ -938,4 +942,4 @@ def PawsShopCatBreedBuy(name):
 
 if __name__ =="__main__":
 	#app.debug = True
-	app.run(debug= True)
+	app.run(debug=True)

@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Know Your Cat</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+
     <script src="{{ url_for('static', filename='a076d05399.js')}}"></script>
+	
+	
+        <link href="/static/img/favicon.ico" rel="icon">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+        
+        <!-- CSS Libraries -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+     <script src="//code.jquery.com/jquery.min.js"></script>
+        
+        <!-- Template Stylesheet -->
+        <link href="/static/css/style.css" rel="stylesheet">
 </head>
 <script>
   function playAudio() {
@@ -15,49 +31,128 @@
     audioFile.play()
     }
 </script>
+
+{% extends "navbarfooter.html" %}
+{% set active_page = "catclassify" %}
+{% block content %}
 <body>
-  <nav>
-    <div class="wrapper">
-      <div class="logo"><a href={{url_for('home')}}>SG CATS & DOGS</a></div>
-      <input type="radio" name="slider" id="menu-btn">
-      <input type="radio" name="slider" id="close-btn">
-      <ul class="nav-links">
-        <label for="close-btn" class="bttn close-btn"><i class="fas fa-times"></i></label>
-        <li><a href={{url_for('home')}}>Home</a></li>
-        <li><a href={{url_for('about')}}>About</a></li>
-        <li>
-          <a href={{url_for('dogs')}} class="desktop-item">Dogs</a>
-          <input type="checkbox" id="showDrop">
-          <label for="showDrop" class="mobile-item">Dogs</label>
-          <ul class="drop-menu">
-            <li><a href="{{url_for('dogs')}}#hdb">HDB Approved</a></li>
-            <li><a href="{{url_for('dogs')}}#small">Small Breed</a></li>
-            <li><a href="{{url_for('dogs')}}#large">Large Breed</a></li>
-          </ul>
-        </li>
-        <li><a href={{url_for('cats')}}>Cats</a></li>
-        <li>
-          <a href="#" class="desktop-item">Know Your Breed</a>
-          <input type="checkbox" id="showDrop">
-          <label for="showDrop" class="mobile-item">Know Your Breed</label>
-          <ul class="drop-menu">
-            <li><a href={{url_for('dogclassify')}}>Know Your Dog</a></li>
-            <li><a href={{url_for('catclassify')}}>Know Your Cat</a></li>
-          </ul>
-        </li>
-        <li><a href={{url_for('doodle')}}>Doodle Game</a></li>
-      </ul>
-      <label for="menu-btn" class="bttn menu-btn"><i class="fas fa-bars"></i></label>
-    </div>
-  </nav>
-  <div class="main">
-        <h1><span>K</span><span>N</span><span>O</span><span>W</span><span> </span><span>Y</span><span>O</span><span>U</span><span>R</span><span> </span><span>C</span><span>A</span><span>T</span><span>!</span></h1>
-        <h2>Upload a picture of your cat and we'll tell you what breed it is!</h2>
+ 
+  <div style="justify-content: center;" class="main">
+      	 <div class="section-header text-center" style="padding-top:2%">
+                  <p>Know Your Cat</p>
+                  <h2>Upload a picture of your cat</h2>
+              </div>
+			  
+			<!--  
         <form class="p-3 text-center upload" action='/catclassify.html', method="post" enctype="multipart/form-data" onsubmit="loading();">
             <input class="form-control" type ="file" name="imagefile">
             <input class="btn btn-outline-primary" type="submit" value="Predict Image">
         </form>
+		-->
+		
+		   <form class="p-3 text-center upload" action='/catclassify.html', method="post" enctype="multipart/form-data" onsubmit="loading();">
+		<div class="input-group mb-3">
+     <input class="form-control"  type ="file" name="imagefile">
+    <div >
+          	
+     </div>
+		</div>
+		 <input onclick="$('#loading').show();$('#submitButton').hide();$('#catLoading').show();" id="submitButton" class="btn btn-custom" type="submit" value="Predict Image">
+		  <div id="loading" style="display:none;">>
+		 <img src="static/img/loadingcat.gif" alt="" />	
+
+		 	</div>
+			</form>
+			 <span id="catLoading" style="position:absolute;left:0;right:0;margin-left: auto;margin-right:0;text-align:center;display:none;">Loading . . .</span>
+			 
+	
+		
         <div id="loader"></div>
+		
+		
+			<div class="about">
+				    {% if img_path %}
+				{% for item in cat %}
+           <div class="container">
+               <div class="row align-items-center">
+                   <div class="col-lg-6">
+                       <div class="about-img">
+                           <img  src="data:image/png;base64,{{ img_path }}"  width ="500px">
+                       </div>
+                   </div>
+                   <div class="col-lg-6">
+                       <div class="section-header text-left">
+                           <p>Cat Breed</p>
+                           <h2>{{item[0]|safe}}</h2>
+                       </div>
+					   <div>
+					     <script>playAudio()</script>
+						 <button class="btn btn-custom" type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
+						 </br>
+						 </br>
+						  <h2><b>"{{description}}"</b></h2>
+					   </div>
+                       <div class="about-content">
+                           <p> {{item[1]|safe}}</p>
+                           <ul>
+                               <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[2]|safe}}</li>
+
+                                 
+                           </ul>
+						         <button class="btn btn-custom" onclick="location.href='cat/{{item[0]}}'" href="cat/{{item[0]}}">Discover More</button>
+								 <button class="btn btn-custom" onclick="location.href='buyherecat/cat/{{item[0]}}'" href="buyherecat/cat/{{item[0]}}" type="button">View Availability</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+		           {% endfor %}
+        {% endif %} 
+       </div>
+	   
+	   
+	   
+				<div class="about">
+					   {% if noyolo %}
+					   {% for item in cat %}
+           <div class="container">
+               <div class="row align-items-center">
+                   <div class="col-lg-6">
+                       <div class="about-img">
+                           <img src="{{ noyolo }}" width ="500px">
+                       </div>
+                   </div>
+                   <div class="col-lg-6">
+                       <div class="section-header text-left">
+                           <p>Cat Breed</p>
+                           <h2>{{item[0]|safe}}</h2>
+                       </div>
+					   <div >
+					     <script>playAudio()</script>
+						 <button class="btn btn-custom" type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
+						 </br>
+						 </br>
+						 <h2><b>"{{description}}"</b></h2>
+					   </div>
+                       <div class="about-content">
+                           <p> {{item[1]|safe}}</p>
+                           <ul>
+                               <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[2]|safe}}</li>
+			
+
+                              
+                           </ul>
+								<button class="btn btn-custom" onclick="location.href='cat/{{item[0]}}'" href="cat/{{item[0]}}">Discover More</button>
+								 <button class="btn btn-custom" onclick="location.href='buyherecat/cat/{{item[0]}}'" href="buyherecat/cat/{{item[0]}}" type="button">View Availability</button>
+                       </div>
+                   </div>
+               </div>
+			   	   {% endfor %}
+		   {% endif %} 
+           </div>
+		
+		
+		<!-- Old Code 
+		
         {% if img_path %}
         {% for item in cat %}
         <div class="breedhighlight" id="content">
@@ -65,7 +160,7 @@
           
           <div style="text-align: justify;">
             <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}</h3>
-            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio> -->
+            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio>
             <script>playAudio()</script>
             <button type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
             <p>{{description}}</p>
@@ -85,7 +180,7 @@
           
           <div style="text-align: justify;">
             <h3 style="text-align: left; font-size: 30px;">{{item[0]|safe}}</h3>
-            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio> -->
+            <!-- <audio controls autoplay><source src="static/catsound.mp3" type="audio/mp3"></audio> 
             <script>playAudio()</script>
             <button type="button" value="sound" class="btn btn-secondary" onclick="playAudio()" id="playbutton">Play Sound Again</button>
             <p>{{description}}</p>
@@ -98,13 +193,33 @@
         </div>
         {% endfor %}
         {% endif %}
-        
+        -->
   </div>
+  
   <script type="text/javascript">// <![CDATA[
     function loading(){
       document.getElementById("loader").style.display = "block";  
       document.getElementById("content").style.display = "none";  
     }
   // ]]></script> 
+  {% endblock %}
 </body>
+
+</div>
+
+
+ <!-- JavaScript Libraries -->
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+ <script src="/static/lib/easing/easing.min.js"></script>
+ <script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+ <script src="/static/lib/waypoints/waypoints.min.js"></script>
+ <script src="/static/lib/counterup/counterup.min.js"></script>
+
+ <!-- Contact Javascript File -->
+ <script src="/static/mail/jqBootstrapValidation.min.js"></script>
+ <script src="/static/mail/contact.js"></script>
+
+ <!-- Template Javascript -->
+ <script src="/static/js/main.js"></script>
 </html>
