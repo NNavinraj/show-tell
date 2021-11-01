@@ -13,3 +13,4 @@ gTTS==2.2.3
 Pillow==8.4.0
 PyYAML==5.4.1
 scikit_learn==1.0
+pytest
