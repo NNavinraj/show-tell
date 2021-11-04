@@ -84,13 +84,21 @@ def test_dogclassify():
     assert b"Pug" in response.data
     assert response.status_code == 200
 
-def test_dogclassify__failure__bad_request():
+def test_dogclassify__failure__no_file():
     client = app.test_client()
     url = '/dogclassify.html'
     data = {}
 
     response = client.post(url, data=data, follow_redirects = True, content_type='multipart/form-data')
     assert response.status_code == 400
+
+def test_dogclassify__failure__not_jpeg():
+    client = app.test_client()
+    url = '/dogclassify.html'
+    data = {'imagefile' : (os.path.join("./static/background.png"), 'static/background.png')}
+
+    response = client.post(url, data=data, follow_redirects = True, content_type='multipart/form-data')
+    assert response.status_code == 500
 
 def test_catclassify():
     client = app.test_client()
@@ -101,10 +109,18 @@ def test_catclassify():
     assert b"Persian" in response.data
     assert response.status_code == 200
 
-def test_catclassify__failure__bad_request():
+def test_catclassify__failure__no_file():
     client = app.test_client()
     url = '/catclassify.html'
     data = {}
 
     response = client.post(url, data=data, follow_redirects = True, content_type='multipart/form-data')
     assert response.status_code == 400
+
+def test_catclassify__failure__not_jpeg():
+    client = app.test_client()
+    url = '/catclassify.html'
+    data = {'imagefile' : (os.path.join("./static/background.png"), 'static/background.png')}
+
+    response = client.post(url, data=data, follow_redirects = True, content_type='multipart/form-data')
+    assert response.status_code == 500
