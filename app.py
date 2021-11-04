@@ -8,8 +8,16 @@ from keras.models import load_model
 import json
 import yaml
 
-app = Flask(__name__)
+from catClass import catClass
+from catClass import Cat
 
+from catClassifyClass import catClassifyClass
+import os
+
+
+app = Flask(__name__)
+app.register_blueprint(catClass, static_folder='../static')
+app.register_blueprint(catClassifyClass, static_folder='../static')
 
 #configure db
 db = yaml.load(open('db.yaml'))
@@ -82,6 +90,7 @@ confthres = 0.3
 nmsthres = 0.1
 yolo_path = './'
 
+
 def getPrediction(filename):
     from tensorflow.keras.applications.vgg16 import VGG16
     from tensorflow.keras.preprocessing.image import load_img
@@ -99,21 +108,7 @@ def getPrediction(filename):
 
     return label[1], label[2]*100
 
-def getCatPrediction(filename):
-    from tensorflow.keras.applications.vgg16 import VGG16
-    from tensorflow.keras.preprocessing.image import load_img
-    from tensorflow.keras.preprocessing.image import img_to_array
-    from tensorflow.keras.applications.vgg16 import decode_predictions
 
-    model3 = VGG16()
-    image = load_img('static/temp.jpg', target_size=(224, 224))
-    image = img_to_array(image)
-    image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-    image = preprocess_input(image)
-    yhat = model3.predict(image)
-    label = decode_predictions(yhat)
-    label = label[0][0]
-    return label[1], label[2]*100
 
 
 def get_labels(labels_path):
@@ -422,201 +417,14 @@ def word_for_id(integer, tokenizer):
 			return word
 	return None
  
-@app.route("/catclassify.html", methods= ['GET', 'POST'])
-def catclassify():
-    if request.method == "GET":
-        return render_template("catclassify.html")
-    if request.method == "POST":
-        import io
-        from tensorflow.keras import backend as K
-        from pickle import load
-        K.clear_session()
-    #load the model
-        model = load_model("static/CatIdentification/catmodel.hdf5")
-    #get the image of the cat for prediction
-        img = request.files['imagefile']
-        img1 = request.files["imagefile"].read()
-        img_path = "static/temp.jpg"
-        pic = Image.open(img)
-        pic.save(img_path, 'JPEG')
-        
-        x = path_to_tensor(img_path)
-        tensors = x.astype('float32')
-        preprocessed_input = preprocess_input_vgg19(tensors)
-        y = VGG19(weights='imagenet', include_top=False).predict(preprocessed_input, batch_size=32)
 
-        predictions = model.predict([y])
-        breed_predictions = [np.argmax(prediction) for prediction in predictions]
-        #catName = cat_names[breed_predictions[0]]
-        catName = ntpath.basename(cat_names[breed_predictions[0]])
-        
-        def get_predection(image,net,LABELS,COLORS):
-            import time
-            from werkzeug.utils import secure_filename
-            (H, W) = image.shape[:2]
-            # determine only the *output* layer names that we need from YOLO
-            ln = net.getLayerNames()
-            ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-            
-            # construct a blob from the input image and then perform a forward
-            # pass of the YOLO object detector, giving us our bounding boxes and
-            # associated probabilities
-            blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416),
-                                         swapRB=True, crop=False)
-            net.setInput(blob)
-            start = time.time()
-            layerOutputs = net.forward(ln)
-
-            end = time.time()
-        
-            # initialize our lists of detected bounding boxes, confidences, and
-            # class IDs, respectively
-            boxes = []
-            confidences = []
-            classIDs = []
-            
-            # loop over each of the layer outputs
-            for output in layerOutputs:
-                # loop over each of the detections
-                for detection in output:
-                    # extract the class ID and confidence (i.e., probability) of
-                    # the current object detection
-                    scores = detection[5:]
-
-                    classID = np.argmax(scores)
-                    confidence = scores[classID]
-                    
-                    # filter out weak predictions by ensuring the detected
-                    # probability is greater than the minimum probability
-                    if confidence > confthres:
-                        # scale the bounding box coordinates back relative to the
-                        # size of the image, keeping in mind that YOLO actually
-                        # returns the center (x, y)-coordinates of the bounding
-                        # box followed by the boxes' width and height
-                        box = detection[0:4] * np.array([W, H, W, H])
-                        (centerX, centerY, width, height) = box.astype("int")
-                        
-                        # use the center (x, y)-coordinates to derive the top and
-                        # and left corner of the bounding box
-                        x = int(centerX - (width / 2))
-                        y = int(centerY - (height / 2))
-                        
-                        # update our list of bounding box coordinates, confidences,
-                        # and class IDs
-                        boxes.append([x, y, int(width), int(height)])
-                        confidences.append(float(confidence))
-                        classIDs.append(classID)
-                        
-                        # apply non-maxima suppression to suppress weak, overlapping bounding
-                        # boxes
-                        idxs = cv2.dnn.NMSBoxes(boxes, confidences, confthres,
-                                                nmsthres)
-                        
-                        # ensure at least one detection exists
-                        if len(idxs) > 0:
-                            # loop over the indexes we are keeping
-                            for i in idxs.flatten():
-                                # extract the bounding box coordinates
-                                (x, y) = (boxes[i][0], boxes[i][1])
-                                (w, h) = (boxes[i][2], boxes[i][3])
-                                
-                                # draw a bounding box rectangle and label on the image
-                                color = [int(c) for c in COLORS[classIDs[i]]]
-                                y = y - 10 if y - 10 > 10 else y + 15
-                                cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-
-                                
-                                img = request.files["imagefile"]
-                                filename = secure_filename(img.filename)
-                                getCatPrediction(filename)
-                                labelx, acc = getCatPrediction(filename)
-
-                                cv2.putText(image, catName, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,0.5, color, 2)
-                                return image
-                            
-        #get the image of the dog for prediction
-        
-        # load our input image and grab its spatial dimensions
-        yolo = True
-
-        try:
-            #img1 = request.files["imagefile"].read()
-            img1 = Image.open(io.BytesIO(img1))
-            npimg=np.array(img1)
-            image=npimg.copy()
-            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-            res=get_predection(image,nets,Lables,Colors)
-            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-            image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
-
-            cv2.waitKey()
-            cv2.imwrite("filename1.png", res)
-            np_img=Image.fromarray(image)
-            img_encoded=image_to_byte_array(np_img)  
-            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")     
-        except:
-            yolo = False
-        
-        var = gTTS(catName, lang = 'en')
-        var.save("static/catsound.mp3")
-    
-    
-    # generate a description for an image
-# generate a description for an image
-    def generate_desc(model, tokenizer, photo, max_length):
-        from tensorflow.keras.preprocessing.sequence import pad_sequences
-        from pickle import load
-        from numpy import argmax
-	# seed the generation process
-        in_text = 'a'
-	# iterate over the whole length of the sequence
-        for i in range(max_length):
-		# integer encode input sequence
-            sequence = tokenizer.texts_to_sequences([in_text])[0]
-		# pad input
-            sequence = pad_sequences([sequence], maxlen=max_length)
-		# predict next word
-            yhat = model.predict([photo,sequence], verbose=0)
-		# convert probability to integer
-            yhat = argmax(yhat)
-		# map integer to word
-            word = word_for_id(yhat, tokenizer)
-		# stop if we cannot map the word
-            if word is None:
-                break
-		# append as input for generating the next word
-            in_text += ' ' + word
-		# stop if we predict the end of the sequence
-            if word == 'cat':
-                break
-        return in_text
-    
-    # load the tokenizer
-    tokenizer = load(open('static/CatIdentification/CatImageCaption/tokenizer.pkl', 'rb'))
-    # pre-define the max sequence length (from training)
-    max_length = 8
-    # load the model
-    model = load_model('static/CatIdentification/CatImageCaption/model-ep007-loss0.056-val_loss0.225.h5')
-    # load and prepare the photograph
-    photo = extract_features(img_path)
-
-    #get description from database
-    cur = mysql.connection.cursor()
-    sql = "select Breed, Description, AverageLifeSpan from cat where naming_patter = '" + catName + "'"
-    value = cur.execute(sql)
-    cat = cur.fetchall()
-    cur.close()
-
-    # generate description
-    description1 = generate_desc(model, tokenizer, photo, max_length)
-    description = cat[0][0] + ' is ' + description1
-    if yolo:
-        return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
-    else:
-        return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
 
 @app.route("/dogs.html")
 def dogs():
+
+    app.logger.warning('testing warning log')
+    app.logger.error('testing error log')
+    app.logger.info('testing info log')
     #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
     cur = mysql.connection.cursor()
     sql = "select Breed from dog where HDB = 'HDB'"
@@ -633,17 +441,6 @@ def dogs():
     return render_template("dogs.html", hdb=hdb, small=small, large=large)
     cur.close()
 
-@app.route("/cats.html")
-def cats():
-    #insert sql statement to get names of cats
-    cur = mysql.connection.cursor()
-    sql = "select Breed from cat"
-    value = cur.execute(sql)
-    cat = cur.fetchall()
-    
-    #to include the values
-    return render_template("cats.html", cat=cat)
-    cur.close()
     
 @app.route("/dog/<name>")
 def dogbreed(name):
@@ -654,14 +451,7 @@ def dogbreed(name):
     return render_template("dogbreed.html", result=result, img=name)
     cur.close()
 
-@app.route("/cat/<name>")
-def catbreed(name):
-    cur = mysql.connection.cursor()
-    sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from cat where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("catbreed.html", result=result, img=name)
-    cur.close()
+
 
 @app.route("/doodle.html", methods=["GET", "POST"])
 def doodle():
@@ -771,14 +561,7 @@ def buydog(name):
     return render_template("buyheredog.html", result=result, img=name)
     cur.close()
     
-@app.route("/buyherecat/cat/<name>")
-def buycat(name):
-    cur = mysql.connection.cursor()
-    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("buyherecat.html", result=result, img=name)
-    cur.close()
+
 	
 @app.route("/sgPetStoreDogs.html")
 def sgPetStoreDogs():
@@ -940,6 +723,10 @@ def PawsShopCatBreedBuy(name):
     cur.close()
 
 
+
 if __name__ =="__main__":
+   
+
 	#app.debug = True
-	app.run()
+	app.run(debug=True)
+    

@@ -72,9 +72,9 @@
     ('/', 'index', 'Home'),
     ('/about.html', 'about', 'About'),
     ('/dogs.html', 'dogs', 'Dogs'),
-	('/cats.html', 'cats', 'Cats'),
+	('/cats', 'cats', 'Cats'),
 	('/dogclassify.html', 'dogclassify', 'Know Your Dog'),
-	('/catclassify.html', 'catclassify', 'Know Your Cat'),
+	('/catclassify', 'catclassify', 'Know Your Cat'),
 	
 ] -%}
 
@@ -110,20 +110,11 @@
                      <a href={{url_for('dogs')}} class="nav-item nav-link ">Dogs</a>
 
                      
-                    <a href={{url_for('cats')}} class="nav-item nav-link">Cats</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Know Your Breed</a>
-                        <div class="dropdown-menu">
-                            <a href={{url_for('dogclassify')}} class="dropdown-item">Know Your Dog</a>
-                            <a href={{url_for('catclassify')}} class="dropdown-item">Know Your Cat</a>
-                          
-                        </div>
-                    </div>
-                	-->
+              
                 </div>
 			
                 <div class="ml-auto">
-                    <a href={{url_for('doodle')}} class="btn btn-custom" href="#">Doodle Game</a>
+            <!--        <a href={{url_for('doodle')}} class="btn btn-custom" href="#">Doodle Game</a> -->
                 </div>
             </div>
         </nav>
