@@ -62,7 +62,7 @@
                       <ul>
                       <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[1]|safe}}</li>
  
-                      <button class="btn btn-custom" onclick="location.href='{{url_for('buycat', name = item[0])}}'"  type="button">Buy Now!</button>
+                      <button class="btn btn-custom" onclick="location.href='/cats/buyherecat/{{item[0]}}'" type="button">Buy Now!</button>
 
                       </ul>
              
