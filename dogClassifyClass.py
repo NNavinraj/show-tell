@@ -38,7 +38,7 @@ import json
 import yaml
 
 app = Flask(__name__)
-catClassifyClass = Blueprint("catClassifyClass", __name__, static_folder="static", template_folder="templates")
+dogClassifyClass = Blueprint("dogClassifyClass", __name__, static_folder="static", template_folder="templates")
 #configure db
 db = yaml.load(open('db.yaml'))
 app.config['MYSQL_HOST'] = db['mysql_host']
@@ -83,21 +83,6 @@ def getPrediction(filename):
 
     return label[1], label[2]*100
 
-def getCatPrediction(filename):
-    from tensorflow.keras.applications.vgg16 import VGG16
-    from tensorflow.keras.preprocessing.image import load_img
-    from tensorflow.keras.preprocessing.image import img_to_array
-    from tensorflow.keras.applications.vgg16 import decode_predictions
-
-    model3 = VGG16()
-    image = load_img('static/temp.jpg', target_size=(224, 224))
-    image = img_to_array(image)
-    image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-    image = preprocess_input(image)
-    yhat = model3.predict(image)
-    label = decode_predictions(yhat)
-    label = label[0][0]
-    return label[1], label[2]*100
 
 
 def get_labels(labels_path):
@@ -167,22 +152,6 @@ def getPrediction(filename):
 
     return label[1], label[2]*100
 
-def getCatPrediction(filename):
-    from tensorflow.keras.applications.vgg16 import VGG16
-    from tensorflow.keras.preprocessing.image import load_img
-    from tensorflow.keras.preprocessing.image import img_to_array
-    from tensorflow.keras.applications.vgg16 import decode_predictions
-
-    model3 = VGG16()
-    image = load_img('static/temp.jpg', target_size=(224, 224))
-    image = img_to_array(image)
-    image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-    image = preprocess_input(image)
-    yhat = model3.predict(image)
-    label = decode_predictions(yhat)
-    label = label[0][0]
-    return label[1], label[2]*100
-
 
 #path to tensor
 def path_to_tensor(img_path):
@@ -241,86 +210,55 @@ def word_for_id(integer, tokenizer):
 			return word
 	return None
 
+@dogClassifyClass.route("/dogclassify.html", methods= ['POST'])
+def dogclassify():
 
-def fileEmptyCheck(fileType):
-    import os
-    import filetype
-    import io
-    from PIL import Image
-    
-    filetypess = fileType.filename.split('.')[-1]
-    if fileType.filename == '':
-        checkT = True
-        checkTType = False
-        return  "checkT"
-    
-    elif (filetypess != "jpg"):
-        if(filetypess != "png"):
-            checkT = False
-            checkTType = True
-            return  "checkTType"
-        
-        else:
-            return "none"
-        
-        
-    
-
-        
-       
-          
-
-        
-   # if(filetype.lower() != "png" or filetype.lower() != "jpg" ):
-        
-  
-    
-
-        
-    
-
-@catClassifyClass.route("/catclassify", methods= ['POST'])
-def catclassify():
     if request.method == "POST":
         import io
         from tensorflow.keras import backend as K
-        from pickle import load
-        import os
-        import filetype
+        
         K.clear_session()
-    #load the model
-        model = load_model("static/CatIdentification/catmodel.hdf5")
-    #get the image of the cat for prediction
-        img = request.files['imagefile']
-        
-        #Check if 
-        checkT = fileEmptyCheck(img)
-        if ( checkT == "checkT"):
-            checkT = True
-            checkTType = False
-            return render_template("/catclassify.html", checkT=checkT, checkTType=checkTType)
- 
-        if ( checkT == "checkTType"):
-            checkT = False
-            checkTType = True
-            return render_template("/catclassify.html", checkT=checkT, checkTType=checkTType)
-  
-        
-        
-        img1 = request.files["imagefile"].read()
-        img_path = "static/temp.jpg"
-        pic = Image.open(img)
-        pic.save(img_path, 'JPEG')
-        
-        x = path_to_tensor(img_path)
-        tensors = x.astype('float32')
-        preprocessed_input = preprocess_input_vgg19(tensors)
-        y = VGG19(weights='imagenet', include_top=False).predict(preprocessed_input, batch_size=32)
+    #read the csv file
 
-        predictions = model.predict([y])
-        breed_predictions = [np.argmax(prediction) for prediction in predictions]
-        #catName = cat_names[breed_predictions[0]]
-        catName = ntpath.basename(cat_names[breed_predictions[0]])
+        df_labels = pd.read_csv("static/DogIdentification/labels.csv")
+    #store training and testing images folder location
+        train_file = "static/DogIdentification/Train"
+        test_file = "static/DogIdentification/Test"
+
+    #specify number
+        num_breeds = 55
+        im_size = 224
+        batch_size = 64
+        encoder = LabelEncoder()
+
+    #get only 55 unique breeds record 
+        breed_dict = list(df_labels['breed'].value_counts().keys()) 
+        new_list = sorted(breed_dict,reverse=True)[:num_breeds]
+    #change the dataset to have only those 60 unique breed records
+        df_labels = df_labels.query('breed in @new_list')
+
+    #load the model
+        model2 = load_model("static/DogIdentification/dogmodel")
+        
+        img2 = request.files['imagefile']
+        img = request.files["imagefile"].read()
+        img_path = "static/temp.jpg"
+        #img_path = img_path + img2.filename
+        pred_img_path = img_path
+        pic = Image.open(img2)
+        pic.save(img_path, 'JPEG')
+    #read the image file and convert into numeric format
+    #resize all images to one dimension i.e. 224x224
+        pred_img_array = cv2.resize(cv2.imread(pred_img_path,cv2.IMREAD_COLOR),((im_size,im_size)))
+    #scale array into the range of -1 to 1.
+    #expand the dimension on the axis 0 and normalize the array values
+        pred_img_array = preprocess_input(np.expand_dims(np.array(pred_img_array[...,::-1].astype(np.float32)).copy(), axis=0))
+     
+    #feed the model with the image array for prediction
+        pred_val = model2.predict(np.array(pred_img_array,dtype="float32"))
+     
+    #display the predicted breed of dog
+        pred_breed = sorted(new_list)[np.argmax(pred_val)]
         
         def get_predection(image,net,LABELS,COLORS):
             import time
@@ -338,9 +276,9 @@ def catclassify():
             net.setInput(blob)
             start = time.time()
             layerOutputs = net.forward(ln)
-
             end = time.time()
-        
+            
+            
             # initialize our lists of detected bounding boxes, confidences, and
             # class IDs, respectively
             boxes = []
@@ -396,25 +334,25 @@ def catclassify():
                                 color = [int(c) for c in COLORS[classIDs[i]]]
                                 y = y - 10 if y - 10 > 10 else y + 15
                                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-
+                            
                                 
                                 img = request.files["imagefile"]
                                 filename = secure_filename(img.filename)
-                                getCatPrediction(filename)
-                                labelx, acc = getCatPrediction(filename)
+                                getPrediction(filename)
+                                labelx, acc = getPrediction(filename)
 
-                                cv2.putText(image, catName, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,0.5, color, 2)
+                                cv2.putText(image, pred_breed, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,0.5, color, 2)
                                 return image
-                            
-        #get the image of the dog for prediction
+        
+
+        
+    #get the image of the dog for prediction
         
         # load our input image and grab its spatial dimensions
-        yolo = True
-
         try:
-            #img1 = request.files["imagefile"].read()
-            img1 = Image.open(io.BytesIO(img1))
-            npimg=np.array(img1)
+            #img = request.files["imagefile"].read()
+            img = Image.open(io.BytesIO(img))
+            npimg=np.array(img)
             image=npimg.copy()
             image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
             res=get_predection(image,nets,Lables,Colors)
@@ -422,145 +360,37 @@ def catclassify():
             image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
 
             cv2.waitKey()
-            cv2.imwrite("filename1.png", res)
+            cv2.imwrite("filename.png", res)
             np_img=Image.fromarray(image)
             img_encoded=image_to_byte_array(np_img)  
-            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")     
+            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")  
+
+            #get description from database
+            cur = mysql.connection.cursor()
+            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
+            value = cur.execute(sql)
+            description = cur.fetchall()
+            cur.close()
+            var = gTTS(str(description[0][0]), lang = 'en')
+            var.save("static/dogsound.mp3")
+            return render_template("dogclassify.html", img_path = base64_bytes, description = description)
         except:
-            yolo = False
-        
-        var = gTTS(catName, lang = 'en')
-        var.save("static/catsound.mp3")
-    
-    
-    # generate a description for an image
-# generate a description for an image
-    def generate_desc(model, tokenizer, photo, max_length):
-        from tensorflow.keras.preprocessing.sequence import pad_sequences
-        from pickle import load
-        from numpy import argmax
-	# seed the generation process
-        in_text = 'a'
-	# iterate over the whole length of the sequence
-        for i in range(max_length):
-		# integer encode input sequence
-            sequence = tokenizer.texts_to_sequences([in_text])[0]
-		# pad input
-            sequence = pad_sequences([sequence], maxlen=max_length)
-		# predict next word
-            yhat = model.predict([photo,sequence], verbose=0)
-		# convert probability to integer
-            yhat = argmax(yhat)
-		# map integer to word
-            word = word_for_id(yhat, tokenizer)
-		# stop if we cannot map the word
-            if word is None:
-                break
-		# append as input for generating the next word
-            in_text += ' ' + word
-		# stop if we predict the end of the sequence
-            if word == 'cat':
-                break
-        return in_text
-    
-    # load the tokenizer
-    tokenizer = load(open('static/CatIdentification/CatImageCaption/tokenizer.pkl', 'rb'))
-    # pre-define the max sequence length (from training)
-    max_length = 8
-    # load the model
-    model = load_model('static/CatIdentification/CatImageCaption/model-ep007-loss0.056-val_loss0.225.h5')
-    # load and prepare the photograph
-    photo = extract_features(img_path)
 
     #get description from database
-    cur = mysql.connection.cursor()
-    sql = "select Breed, Description, AverageLifeSpan from cat where naming_patter = '" + catName + "'"
-    value = cur.execute(sql)
-    cat = cur.fetchall()
-    cur.close()
+            cur = mysql.connection.cursor()
+            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
+            value = cur.execute(sql)
+            description = cur.fetchall()
+            cur.close()
+            var = gTTS(str(description[0][0]), lang = 'en')
+            var.save("static/dogsound.mp3")
+            return render_template("dogclassify.html", noyolo = pred_img_path, description = description)
 
-    # generate description
-    description1 = generate_desc(model, tokenizer, photo, max_length)
-    description = cat[0][0] + ' is ' + description1
-    if yolo:
-        return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
-    else:
-        return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
-    
-       
-       # generate a description for an image
-    # generate a description for an image
-    def generate_desc(model, tokenizer, photo, max_length):
-        from tensorflow.keras.preprocessing.sequence import pad_sequences
-        from pickle import load
-        from numpy import argmax
-    	# seed the generation process
-        in_text = 'a'
-    	# iterate over the whole length of the sequence
-        for i in range(max_length):
-    		# integer encode input sequence
-            sequence = tokenizer.texts_to_sequences([in_text])[0]
-    		# pad input
-            sequence = pad_sequences([sequence], maxlen=max_length)
-    		# predict next word
-            yhat = model.predict([photo,sequence], verbose=0)
-    		# convert probability to integer
-            yhat = argmax(yhat)
-    		# map integer to word
-            word = word_for_id(yhat, tokenizer)
-    		# stop if we cannot map the word
-            if word is None:
-                break
-    		# append as input for generating the next word
-            in_text += ' ' + word
-    		# stop if we predict the end of the sequence
-            if word == 'cat':
-                break
-            return in_text
-    
-    # load the tokenizer
-    tokenizer = load(open('static/CatIdentification/CatImageCaption/tokenizer.pkl', 'rb'))
-    # pre-define the max sequence length (from training)
-    max_length = 8
-    # load the model
-    model = load_model('static/CatIdentification/CatImageCaption/model-ep007-loss0.056-val_loss0.225.h5')
-    # load and prepare the photograph
-    photo = extract_features(img_path)
-
-    #get description from database
-    cur = mysql.connection.cursor()
-    sql = "select Breed, Description, AverageLifeSpan from cat where naming_patter = '" + catName + "'"
-    value = cur.execute(sql)
-    cat = cur.fetchall()
-    cur.close()
-
-    # generate description
-    description1 = generate_desc(model, tokenizer, photo, max_length)
-    description = cat[0][0] + ' is ' + description1
-    if yolo:
-        return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
-        checkT = False
-        checkTType = False
-    else:
-        return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
-        checkT = False
-        checkTType = False
-    
-       
-      
-     
-@catClassifyClass.route("/catclassify", methods= ['GET'])
-def viewCat():
+@dogClassifyClass.route("/dogclassify", methods= ['GET'])
+def viewDog():
     if request.method == "GET":
-        return render_template("/catclassify.html")
+        return render_template("/dogclassify.html")
  
 
-class Cat:
 
-    def __init__(self,name):
-        self.name = name
-        pass    # instance variable unique to each instance
-        
-    def getName(self):
-        return self.name
     

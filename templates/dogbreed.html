@@ -66,7 +66,7 @@
                       <ul>
                       <li><i class="fas fa-paw"></i> <b>Average Life Span:</b> {{item[1]|safe}}</li>
                       <li><i class="fas fa-paw"></i> <b>Size: </b>{{item[2]|safe}}</li>
-                      <button class="btn btn-custom" onclick="location.href='{{url_for('buydog', name = item[0])}}'"  type="button">Buy Now!</button>
+                      <button class="btn btn-custom" onclick="location.href='/dogs/buyheredog/{{item[0]}}'"  type="button">Buy Now!</button>
 
                       </ul>
              
@@ -112,7 +112,7 @@
           <p>Average Lifespan: {{item[1]|safe}}</p>
           <p>Size: {{item[2]|safe}}</p><br>
           <p>{{item[3]|safe}}</p>
-          <button type="button"><a href={{url_for('buydog', name = item[0])}}>Buy here!</button></a>
+
         </div>
         <img src="{{url_for('static', filename='dogs/'+img+'1.jpg')}}" width="400px"/>
       </div>

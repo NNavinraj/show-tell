@@ -71,9 +71,9 @@
 {% set navigation_bar = [
     ('/', 'index', 'Home'),
     ('/about.html', 'about', 'About'),
-    ('/dogs.html', 'dogs', 'Dogs'),
+    ('/dogs', 'dogs', 'Dogs'),
 	('/cats', 'cats', 'Cats'),
-	('/dogclassify.html', 'dogclassify', 'Know Your Dog'),
+	('/dogclassify', 'dogclassify', 'Know Your Dog'),
 	('/catclassify', 'catclassify', 'Know Your Cat'),
 	
 ] -%}
@@ -107,9 +107,7 @@
 						
                     <a href={{url_for('about')}}  class="nav-item nav-link " >About</a>
                     
-                     <a href={{url_for('dogs')}} class="nav-item nav-link ">Dogs</a>
 
-                     
               
                 </div>
 			

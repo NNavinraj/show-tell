@@ -8,16 +8,26 @@ from keras.models import load_model
 import json
 import yaml
 
-from catClass import catClass
-from catClass import Cat
+# IMPORT CLASSES/ENTITIES OUTSIDE OF APP
+from catEntity import catEntity
+from catEntity import Cat
+
+from dogEntity import dogEntity
+from dogEntity import Dog
 
 from catClassifyClass import catClassifyClass
+from dogClassifyClass import dogClassifyClass
+
 import os
 
 
 app = Flask(__name__)
-app.register_blueprint(catClass, static_folder='../static')
+app.register_blueprint(catEntity, static_folder='../static')
 app.register_blueprint(catClassifyClass, static_folder='../static')
+
+app.register_blueprint(dogEntity, static_folder='../static')
+app.register_blueprint(dogClassifyClass, static_folder='../static')
+
 
 #configure db
 db = yaml.load(open('db.yaml'))
@@ -160,183 +170,6 @@ Weights=get_weights(wpath)
 nets=load_yolov3model(CFG,Weights)
 Colors=get_colors(Lables)
 
-@app.route("/dogclassify.html", methods= ['GET', 'POST'])
-def dogclassify():
-    if request.method == "GET":
-        return render_template("dogclassify.html")
-    if request.method == "POST":
-        import io
-        from tensorflow.keras import backend as K
-        
-        K.clear_session()
-    #read the csv file
-
-        df_labels = pd.read_csv("static/DogIdentification/labels.csv")
-    #store training and testing images folder location
-        train_file = "static/DogIdentification/Train"
-        test_file = "static/DogIdentification/Test"
-
-    #specify number
-        num_breeds = 55
-        im_size = 224
-        batch_size = 64
-        encoder = LabelEncoder()
-
-    #get only 55 unique breeds record 
-        breed_dict = list(df_labels['breed'].value_counts().keys()) 
-        new_list = sorted(breed_dict,reverse=True)[:num_breeds]
-    #change the dataset to have only those 60 unique breed records
-        df_labels = df_labels.query('breed in @new_list')
-
-    #load the model
-        model2 = load_model("static/DogIdentification/dogmodel")
-        
-        img2 = request.files['imagefile']
-        img = request.files["imagefile"].read()
-        img_path = "static/temp.jpg"
-        #img_path = img_path + img2.filename
-        pred_img_path = img_path
-        pic = Image.open(img2)
-        pic.save(img_path, 'JPEG')
-    #read the image file and convert into numeric format
-    #resize all images to one dimension i.e. 224x224
-        pred_img_array = cv2.resize(cv2.imread(pred_img_path,cv2.IMREAD_COLOR),((im_size,im_size)))
-    #scale array into the range of -1 to 1.
-    #expand the dimension on the axis 0 and normalize the array values
-        pred_img_array = preprocess_input(np.expand_dims(np.array(pred_img_array[...,::-1].astype(np.float32)).copy(), axis=0))
-     
-    #feed the model with the image array for prediction
-        pred_val = model2.predict(np.array(pred_img_array,dtype="float32"))
-     
-    #display the predicted breed of dog
-        pred_breed = sorted(new_list)[np.argmax(pred_val)]
-        
-        def get_predection(image,net,LABELS,COLORS):
-            import time
-            from werkzeug.utils import secure_filename
-            (H, W) = image.shape[:2]
-            # determine only the *output* layer names that we need from YOLO
-            ln = net.getLayerNames()
-            ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-            
-            # construct a blob from the input image and then perform a forward
-            # pass of the YOLO object detector, giving us our bounding boxes and
-            # associated probabilities
-            blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416),
-                                         swapRB=True, crop=False)
-            net.setInput(blob)
-            start = time.time()
-            layerOutputs = net.forward(ln)
-            end = time.time()
-            
-            
-            # initialize our lists of detected bounding boxes, confidences, and
-            # class IDs, respectively
-            boxes = []
-            confidences = []
-            classIDs = []
-            
-            # loop over each of the layer outputs
-            for output in layerOutputs:
-                # loop over each of the detections
-                for detection in output:
-                    # extract the class ID and confidence (i.e., probability) of
-                    # the current object detection
-                    scores = detection[5:]
-
-                    classID = np.argmax(scores)
-                    confidence = scores[classID]
-                    
-                    # filter out weak predictions by ensuring the detected
-                    # probability is greater than the minimum probability
-                    if confidence > confthres:
-                        # scale the bounding box coordinates back relative to the
-                        # size of the image, keeping in mind that YOLO actually
-                        # returns the center (x, y)-coordinates of the bounding
-                        # box followed by the boxes' width and height
-                        box = detection[0:4] * np.array([W, H, W, H])
-                        (centerX, centerY, width, height) = box.astype("int")
-                        
-                        # use the center (x, y)-coordinates to derive the top and
-                        # and left corner of the bounding box
-                        x = int(centerX - (width / 2))
-                        y = int(centerY - (height / 2))
-                        
-                        # update our list of bounding box coordinates, confidences,
-                        # and class IDs
-                        boxes.append([x, y, int(width), int(height)])
-                        confidences.append(float(confidence))
-                        classIDs.append(classID)
-                        
-                        # apply non-maxima suppression to suppress weak, overlapping bounding
-                        # boxes
-                        idxs = cv2.dnn.NMSBoxes(boxes, confidences, confthres,
-                                                nmsthres)
-                        
-                        # ensure at least one detection exists
-                        if len(idxs) > 0:
-                            # loop over the indexes we are keeping
-                            for i in idxs.flatten():
-                                # extract the bounding box coordinates
-                                (x, y) = (boxes[i][0], boxes[i][1])
-                                (w, h) = (boxes[i][2], boxes[i][3])
-                                
-                                # draw a bounding box rectangle and label on the image
-                                color = [int(c) for c in COLORS[classIDs[i]]]
-                                y = y - 10 if y - 10 > 10 else y + 15
-                                cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-                            
-                                
-                                img = request.files["imagefile"]
-                                filename = secure_filename(img.filename)
-                                getPrediction(filename)
-                                labelx, acc = getPrediction(filename)
-
-                                cv2.putText(image, pred_breed, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,0.5, color, 2)
-                                return image
-        
-
-        
-    #get the image of the dog for prediction
-        
-        # load our input image and grab its spatial dimensions
-        try:
-            #img = request.files["imagefile"].read()
-            img = Image.open(io.BytesIO(img))
-            npimg=np.array(img)
-            image=npimg.copy()
-            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-            res=get_predection(image,nets,Lables,Colors)
-            image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-            image=cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
-
-            cv2.waitKey()
-            cv2.imwrite("filename.png", res)
-            np_img=Image.fromarray(image)
-            img_encoded=image_to_byte_array(np_img)  
-            base64_bytes = base64.b64encode(img_encoded).decode("utf-8")  
-
-            #get description from database
-            cur = mysql.connection.cursor()
-            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
-            value = cur.execute(sql)
-            description = cur.fetchall()
-            cur.close()
-            var = gTTS(str(description[0][0]), lang = 'en')
-            var.save("static/dogsound.mp3")
-            return render_template("dogclassify.html", img_path = base64_bytes, description = description)
-        except:
-
-    #get description from database
-            cur = mysql.connection.cursor()
-            sql = "select Breed, Description, AverageLifeSpan from dog where naming_patter = '" + pred_breed + "'"
-            value = cur.execute(sql)
-            description = cur.fetchall()
-            cur.close()
-            var = gTTS(str(description[0][0]), lang = 'en')
-            var.save("static/dogsound.mp3")
-            return render_template("dogclassify.html", noyolo = pred_img_path, description = description)
-
 #load the cat dataset
 def load_dataset(path):
     data = load_files(path)
@@ -371,85 +204,9 @@ train_tensors = paths_to_tensor(train_files).astype('float32')/255
 valid_tensors = paths_to_tensor(valid_files).astype('float32')/255
 test_tensors = paths_to_tensor(test_files).astype('float32')/255
 
-#extract VGG19 features
-def extract_VGG19(file_paths):
-    tensors = paths_to_tensor(file_paths).astype('float32')
-    preprocessed_input = preprocess_input_vgg19(tensors)
-    return VGG19(weights='imagenet', include_top=False).predict(preprocessed_input, batch_size=32)
-train_vgg19 = "static/CatIdentification/train_vgg19.pkl"
-valid_vgg19 = "static/CatIdentification/valid_vgg19.pkl"
-test_vgg19 = "static/CatIdentification/test_vgg19.pkl"
 
 
-#CAT IMAGE CAPTION CODE STARTS HERE
 
- 
-# extract features from each photo in the directory
-def extract_features(filename):
-    
-    from tensorflow.keras.applications.vgg16 import VGG16
-    from tensorflow.keras.preprocessing.image import load_img
-    from tensorflow.keras.preprocessing.image import img_to_array
-    from tensorflow.keras.applications.vgg16 import preprocess_input
-    from tensorflow.keras.models import Model
-    from tensorflow.keras.models import load_model
-
-	# load the model
-    model4 = VGG16()
-	# re-structure the model
-    model4 = Model(inputs=model4.inputs, outputs=model4.layers[-2].output)
-	# load the photo
-    image = load_img(filename, target_size=(224, 224))
-	# convert the image pixels to a numpy array
-    image = img_to_array(image)
-	# reshape data for the model
-    image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-	# prepare the image for the VGG model
-    image = preprocess_input(image)
-	# get features
-    feature = model4.predict(image, verbose=0)
-    return feature
-
-# map an integer to a word
-def word_for_id(integer, tokenizer):
-	for word, index in tokenizer.word_index.items():
-		if index == integer:
-			return word
-	return None
- 
-
-
-@app.route("/dogs.html")
-def dogs():
-
-    app.logger.warning('testing warning log')
-    app.logger.error('testing error log')
-    app.logger.info('testing info log')
-    #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
-    cur = mysql.connection.cursor()
-    sql = "select Breed from dog where HDB = 'HDB'"
-    value = cur.execute(sql)
-    hdb = cur.fetchall()
-    sql = "select Breed from dog where Size = 'small'"
-    value = cur.execute(sql)
-    small = cur.fetchall()
-    sql = "select Breed from dog where Size = 'Large'"
-    value = cur.execute(sql)
-    large = cur.fetchall()
-    
-    #to include the values
-    return render_template("dogs.html", hdb=hdb, small=small, large=large)
-    cur.close()
-
-    
-@app.route("/dog/<name>")
-def dogbreed(name):
-    cur = mysql.connection.cursor()
-    sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from dog where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("dogbreed.html", result=result, img=name)
-    cur.close()
 
 
 
@@ -552,14 +309,6 @@ def PawsShopContactUs():
     return render_template("PawsShopContactUs.html",cat=cat)
     cur.close()
 
-@app.route("/buyheredog/dog/<name>")
-def buydog(name):
-    cur = mysql.connection.cursor()
-    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("buyheredog.html", result=result, img=name)
-    cur.close()
     
 
 	
