@@ -19,7 +19,9 @@ from catClassifyClass import catClassifyClass
 from dogClassifyClass import dogClassifyClass
 
 import os
-
+import filetype
+import io
+from PIL import Image
 
 app = Flask(__name__)
 app.register_blueprint(catEntity, static_folder='../static')
