@@ -241,17 +241,72 @@ def word_for_id(integer, tokenizer):
 			return word
 	return None
 
+
+def fileEmptyCheck(fileType):
+    import os
+    import filetype
+    import io
+    from PIL import Image
+    
+    filetypess = fileType.filename.split('.')[-1]
+    if fileType.filename == '':
+        checkT = True
+        checkTType = False
+        return  "checkT"
+    
+    elif (filetypess != "jpg"):
+        if(filetypess != "png"):
+            checkT = False
+            checkTType = True
+            return  "checkTType"
+        
+        else:
+            return "none"
+        
+        
+    
+
+        
+       
+          
+
+        
+   # if(filetype.lower() != "png" or filetype.lower() != "jpg" ):
+        
+  
+    
+
+        
+    
+
 @catClassifyClass.route("/catclassify", methods= ['POST'])
 def catclassify():
     if request.method == "POST":
         import io
         from tensorflow.keras import backend as K
         from pickle import load
+        import os
+        import filetype
         K.clear_session()
     #load the model
         model = load_model("static/CatIdentification/catmodel.hdf5")
     #get the image of the cat for prediction
         img = request.files['imagefile']
+        
+        #Check if 
+        checkT = fileEmptyCheck(img)
+        if ( checkT == "checkT"):
+            checkT = True
+            checkTType = False
+            return render_template("/catclassify.html", checkT=checkT, checkTType=checkTType)
+ 
+        if ( checkT == "checkTType"):
+            checkT = False
+            checkTType = True
+            return render_template("/catclassify.html", checkT=checkT, checkTType=checkTType)
+  
+        
+        
         img1 = request.files["imagefile"].read()
         img_path = "static/temp.jpg"
         pic = Image.open(img)
@@ -432,6 +487,68 @@ def catclassify():
     else:
         return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
     
+       
+       # generate a description for an image
+    # generate a description for an image
+    def generate_desc(model, tokenizer, photo, max_length):
+        from tensorflow.keras.preprocessing.sequence import pad_sequences
+        from pickle import load
+        from numpy import argmax
+    	# seed the generation process
+        in_text = 'a'
+    	# iterate over the whole length of the sequence
+        for i in range(max_length):
+    		# integer encode input sequence
+            sequence = tokenizer.texts_to_sequences([in_text])[0]
+    		# pad input
+            sequence = pad_sequences([sequence], maxlen=max_length)
+    		# predict next word
+            yhat = model.predict([photo,sequence], verbose=0)
+    		# convert probability to integer
+            yhat = argmax(yhat)
+    		# map integer to word
+            word = word_for_id(yhat, tokenizer)
+    		# stop if we cannot map the word
+            if word is None:
+                break
+    		# append as input for generating the next word
+            in_text += ' ' + word
+    		# stop if we predict the end of the sequence
+            if word == 'cat':
+                break
+            return in_text
+    
+    # load the tokenizer
+    tokenizer = load(open('static/CatIdentification/CatImageCaption/tokenizer.pkl', 'rb'))
+    # pre-define the max sequence length (from training)
+    max_length = 8
+    # load the model
+    model = load_model('static/CatIdentification/CatImageCaption/model-ep007-loss0.056-val_loss0.225.h5')
+    # load and prepare the photograph
+    photo = extract_features(img_path)
+
+    #get description from database
+    cur = mysql.connection.cursor()
+    sql = "select Breed, Description, AverageLifeSpan from cat where naming_patter = '" + catName + "'"
+    value = cur.execute(sql)
+    cat = cur.fetchall()
+    cur.close()
+
+    # generate description
+    description1 = generate_desc(model, tokenizer, photo, max_length)
+    description = cat[0][0] + ' is ' + description1
+    if yolo:
+        return render_template("catclassify.html", img_path = base64_bytes, description = description, cat = cat)
+        checkT = False
+        checkTType = False
+    else:
+        return render_template("catclassify.html", noyolo = img_path, description = description, cat = cat)
+        checkT = False
+        checkTType = False
+    
+       
+      
+     
 @catClassifyClass.route("/catclassify", methods= ['GET'])
 def viewCat():
     if request.method == "GET":
