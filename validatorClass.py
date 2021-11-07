@@ -37,8 +37,9 @@ from keras.models import load_model
 import json
 import yaml
 
+
+
 app = Flask(__name__)
-catClassifyClass = Blueprint("catClassifyClass", __name__, static_folder="static", template_folder="templates")
 #configure db
 db = yaml.load(open('db.yaml'))
 app.config['MYSQL_HOST'] = db['mysql_host']
@@ -48,50 +49,45 @@ app.config['MYSQL_DB'] =  db['mysql_db']
  
 mysql = MySQL(app)
 
-#load the cat dataset
-def load_dataset(path):
-    data = load_files(path)
-    cat_files = np.array(data['filenames'])
-    cat_targets = np_utils.to_categorical(np.array(data['target']), 134)
-    return cat_files, cat_targets
-
-train_files, train_targets = load_dataset("static/CatIdentification/Train")
-valid_files, valid_targets = load_dataset("static/CatIdentification/Valid")
-test_files, test_targets = load_dataset("static/CatIdentification/Test")
-
-cat_names = [item[20:-1] for item in sorted(glob("static/CatIdentification/Train/*/"))]
-
-confthres = 0.3
-nmsthres = 0.1
-yolo_path = './'
+validatorClass = Blueprint("validatorClass", __name__, static_folder="static", template_folder="templates")
 
 
-
-
-@catClassifyClass.route("/catclassify", methods= ['POST'])
-def catclassify():
-    if request.method == "POST":
-        import io
-        from tensorflow.keras import backend as K
-        from pickle import load
-        K.clear_session()
-        
-        return render_template("catclassify.html")
-        
- 
+def fileValidationCheck(fileType):
+    import os
+    import filetype
+    import io
+    from PIL import Image
     
-@catClassifyClass.route("/catclassify", methods= ['GET'])
-def viewCat():
-    if request.method == "GET":
-        return render_template("/catclassify.html")
+    filetypess = fileType.filename.split('.')[-1]
+    if fileType.filename == '':
+        checkT = True
+        checkTType = False
+        return  "checkT"
+    
+    elif (filetypess != "jpg"):
+        if(filetypess != "png"):
+            checkT = False
+            checkTType = True
+            return  "checkTType"
+        
+        else:
+            return "none"
+
+
+def checkSqlConnection(db):
+    import os
+    import filetype
+    import io
+    from PIL import Image
+    
+    try:
+        db.connection.cursor()
+        return True
+        
+    except:
+        return False
+
  
 
-class Cat:
 
-    def __init__(self,name):
-        self.name = name
-        pass    # instance variable unique to each instance
-        
-    def getName(self):
-        return self.name
     

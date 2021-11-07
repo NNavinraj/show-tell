@@ -18,6 +18,8 @@ from dogEntity import Dog
 from catClassifyClass import catClassifyClass
 from dogClassifyClass import dogClassifyClass
 
+from validatorClass import validatorClass
+
 import os
 
 
@@ -28,6 +30,7 @@ app.register_blueprint(catClassifyClass, static_folder='../static')
 app.register_blueprint(dogEntity, static_folder='../static')
 app.register_blueprint(dogClassifyClass, static_folder='../static')
 
+app.register_blueprint(validatorClass, static_folder='../static')
 
 #configure db
 db = yaml.load(open('db.yaml'))
@@ -66,6 +69,10 @@ def footerNew():
 @app.route("/navbarfooter.html")
 def navBarFooterNew():
     return render_template("navbarfooter.html")
+
+@app.route("/sqlerror.html")
+def sqlError():
+    return render_template("sqlerror.html")
 
 #DOG CLASSIFICATION CODE
 #IMPORTS
@@ -252,6 +259,7 @@ def sgPetStoreHome():
     #to include the values
     return render_template("sgPetStoreIndex.html",cat=cat)
     cur.close()
+
 
 
 @app.route("/sgPetStoreContactUs.html")
