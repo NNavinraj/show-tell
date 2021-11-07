@@ -37,6 +37,8 @@ from keras.models import load_model
 import json
 import yaml
 
+from validatorClass import fileValidationCheck
+
 app = Flask(__name__)
 catClassifyClass = Blueprint("catClassifyClass", __name__, static_folder="static", template_folder="templates")
 #configure db
@@ -241,42 +243,10 @@ def word_for_id(integer, tokenizer):
 			return word
 	return None
 
-
-def fileEmptyCheck(fileType):
-    import os
-    import filetype
-    import io
-    from PIL import Image
-    
-    filetypess = fileType.filename.split('.')[-1]
-    if fileType.filename == '':
-        checkT = True
-        checkTType = False
-        return  "checkT"
-    
-    elif (filetypess != "jpg"):
-        if(filetypess != "png"):
-            checkT = False
-            checkTType = True
-            return  "checkTType"
-        
-        else:
-            return "none"
-        
-        
-    
-
-        
-       
-          
-
         
    # if(filetype.lower() != "png" or filetype.lower() != "jpg" ):
         
-  
-    
 
-        
     
 
 @catClassifyClass.route("/catclassify", methods= ['POST'])
@@ -294,7 +264,7 @@ def catclassify():
         img = request.files['imagefile']
         
         #Check if 
-        checkT = fileEmptyCheck(img)
+        checkT = fileValidationCheck(img)
         if ( checkT == "checkT"):
             checkT = True
             checkTType = False
@@ -306,6 +276,9 @@ def catclassify():
             return render_template("/catclassify.html", checkT=checkT, checkTType=checkTType)
   
         
+  
+        checkT = False
+        checkTType = False
         
         img1 = request.files["imagefile"].read()
         img_path = "static/temp.jpg"

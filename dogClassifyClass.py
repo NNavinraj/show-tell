@@ -37,6 +37,8 @@ from keras.models import load_model
 import json
 import yaml
 
+from validatorClass import fileValidationCheck
+
 app = Flask(__name__)
 dogClassifyClass = Blueprint("dogClassifyClass", __name__, static_folder="static", template_folder="templates")
 #configure db
@@ -210,6 +212,7 @@ def word_for_id(integer, tokenizer):
 			return word
 	return None
 
+        
 @dogClassifyClass.route("/dogclassify.html", methods= ['POST'])
 def dogclassify():
 
@@ -243,6 +246,23 @@ def dogclassify():
         img2 = request.files['imagefile']
         img = request.files["imagefile"].read()
         img_path = "static/temp.jpg"
+        
+        
+        checkT = fileValidationCheck(img2)
+        if ( checkT == "checkT"):
+            checkT = True
+            checkTType = False
+            return render_template("/dogclassify.html", checkT=checkT, checkTType=checkTType)
+ 
+        if ( checkT == "checkTType"):
+            checkT = False
+            checkTType = True
+            return render_template("/dogclassify.html", checkT=checkT, checkTType=checkTType)
+  
+        
+      
+        checkT = False
+        checkTType = False
         #img_path = img_path + img2.filename
         pred_img_path = img_path
         pic = Image.open(img2)

@@ -37,6 +37,9 @@ from keras.models import load_model
 import json
 import yaml
 
+from validatorClass import fileValidationCheck
+from validatorClass import checkSqlConnection
+
 app = Flask(__name__)
 dogEntity = Blueprint("dogEntity", __name__, static_folder="static", template_folder="templates")
 #configure db
@@ -52,44 +55,53 @@ mysql = MySQL(app)
 @dogEntity.route("/dogs")
 def dogs():
 
-    app.logger.warning('testing warning log')
-    app.logger.error('testing error log')
-    app.logger.info('testing info log')
+
     #insert sql statement to get names of dogs (seperated by breed size/HDB approved)
-    cur = mysql.connection.cursor()
-    sql = "select Breed from dog where HDB = 'HDB'"
-    value = cur.execute(sql)
-    hdb = cur.fetchall()
-    sql = "select Breed from dog where Size = 'small'"
-    value = cur.execute(sql)
-    small = cur.fetchall()
-    sql = "select Breed from dog where Size = 'Large'"
-    value = cur.execute(sql)
-    large = cur.fetchall()
-    
-    #to include the values
-    return render_template("dogs.html", hdb=hdb, small=small, large=large)
+ 
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = "select Breed from dog where HDB = 'HDB'"
+        value = cur.execute(sql)
+        hdb = cur.fetchall()
+        sql = "select Breed from dog where Size = 'small'"
+        value = cur.execute(sql)
+        small = cur.fetchall()
+        sql = "select Breed from dog where Size = 'Large'"
+        value = cur.execute(sql)
+        large = cur.fetchall()
+        #to include the values
+        return render_template("dogs.html", hdb=hdb, small=small, large=large)
+    else:
+        return render_template("sqlerror.html")
     cur.close()
 
     
 @dogEntity.route("/dogs/<name>")
 def dogbreed(name):
-    cur = mysql.connection.cursor()
-    sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from dog where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("dogbreed.html", result=result, img=name)
+  
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from dog where Breed = '" + name + "'"
+        value = cur.execute(sql)
+        result = cur.fetchall()
+        return render_template("dogbreed.html", result=result, img=name)
+    else:
+        return render_template("sqlerror.html")
     cur.close()
     
     
 
 @dogEntity.route("/dogs/buyheredog/<name>")
 def buydog(name):
-    cur = mysql.connection.cursor()
-    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("buyheredog.html", result=result, img=name)
+  
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
+        value = cur.execute(sql)
+        result = cur.fetchall()
+        return render_template("buyheredog.html", result=result, img=name)
+    else:
+        return render_template("sqlerror.html")
     cur.close()
     
 

@@ -37,7 +37,11 @@ from keras.models import load_model
 import json
 import yaml
 
+from validatorClass import validatorClass
+from validatorClass import checkSqlConnection
 app = Flask(__name__)
+
+
 catEntity = Blueprint("catEntity", __name__, static_folder="static", template_folder="templates")
 #configure db
 db = yaml.load(open('db.yaml'))
@@ -50,37 +54,56 @@ mysql = MySQL(app)
 
 
 
+checkSqlConnection(mysql)
+
+
 
 
 
 @catEntity.route("/cats")
 def cats():
     #insert sql statement to get names of cats
-    cur = mysql.connection.cursor()
-    sql = "select Breed from cat"
-    value = cur.execute(sql)
-    cat = cur.fetchall()
-    #to include the values
-    return render_template("cats.html", cat=cat)
+ 
+    
+   
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = "select Breed from cat"
+        value = cur.execute(sql)
+        cat = cur.fetchall()
+        #to include the values
+        return render_template("cats.html", cat=cat)
+    
+    else:
+        return render_template("sqlerror.html")
+    
     cur.close()
 
 @catEntity.route("/cats/<name>")
 def catbreed(name):
-    cur = mysql.connection.cursor()
-    sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from cat where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("catbreed.html", result=result, img=name)
+   
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = "select Breed, AverageLifeSpan, Size, Description, Characteristic from cat where Breed = '" + name + "'"
+        value = cur.execute(sql)
+        result = cur.fetchall()
+        return render_template("catbreed.html", result=result, img=name)
+    else:
+        return render_template("sqlerror.html")
     cur.close()
     
     
 @catEntity.route("/cats/buyherecat/<name>")
 def buycat(name):
-    cur = mysql.connection.cursor()
-    sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
-    value = cur.execute(sql)
-    result = cur.fetchall()
-    return render_template("buyherecat.html", result=result, img=name)
+  
+    if (checkSqlConnection(mysql) == True):
+        cur = mysql.connection.cursor()
+        sql = " select IC, petstoreanimal.petStoreID,name,DateOfBirth,gender,vaccindated,breed,price,size,hdb, address, telephone, email from petstoreanimal join petstore on petstoreanimal.petstoreID = petstore.petStoreID where Breed = '" + name + "'"
+        value = cur.execute(sql)
+        result = cur.fetchall()
+        return render_template("buyherecat.html", result=result, img=name)
+    else:
+        return render_template("sqlerror.html")
     cur.close()
     
 
