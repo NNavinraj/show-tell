@@ -9,11 +9,11 @@ import json
 import yaml
 
 # IMPORT CLASSES/ENTITIES OUTSIDE OF APP
-from catEntity import catEntity
-from catEntity import Cat
+from catClass import catClass
+from catClass import Cat
 
-from dogEntity import dogEntity
-from dogEntity import Dog
+from dogClass import dogClass
+from dogClass import Dog
 
 from catClassifyClass import catClassifyClass
 from dogClassifyClass import dogClassifyClass
@@ -26,10 +26,10 @@ import io
 from PIL import Image
 
 app = Flask(__name__)
-app.register_blueprint(catEntity, static_folder='../static')
+app.register_blueprint(catClass, static_folder='../static')
 app.register_blueprint(catClassifyClass, static_folder='../static')
 
-app.register_blueprint(dogEntity, static_folder='../static')
+app.register_blueprint(dogClass, static_folder='../static')
 app.register_blueprint(dogClassifyClass, static_folder='../static')
 
 app.register_blueprint(validatorClass, static_folder='../static')
