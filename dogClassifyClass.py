@@ -314,7 +314,7 @@ def dogclassify():
                     scores = detection[5:]
 
                     classID = np.argmax(scores)
-                    confidence = scores[classID]
+                    confidence = scores[16]
                     
                     # filter out weak predictions by ensuring the detected
                     # probability is greater than the minimum probability
