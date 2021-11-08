@@ -402,8 +402,7 @@ def catclassify():
         except:
             yolo = False
         
-        var = gTTS(catName, lang = 'en')
-        var.save("static/catsound.mp3")
+
     
     
     # generate a description for an image
@@ -451,7 +450,8 @@ def catclassify():
     value = cur.execute(sql)
     cat = cur.fetchall()
     cur.close()
-
+    var = gTTS(str(cat[0][0]), lang = 'en')
+    var.save("static/catsound.mp3")
     # generate description
     description1 = generate_desc(model, tokenizer, photo, max_length)
     description = cat[0][0] + ' is ' + description1
