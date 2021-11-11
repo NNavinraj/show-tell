@@ -1,4 +1,4 @@
-from flask import Flask,Blueprint, render_template, Flask, redirect, url_for, render_template, request
+from flask import Flask,Blueprint, render_template, Flask, redirect, url_for, render_template, request, g
 import yaml
 from flask_mysqldb import MySQL
 
@@ -219,7 +219,8 @@ def extract_features(filename):
     from tensorflow.keras.applications.vgg16 import preprocess_input
     from tensorflow.keras.models import Model
     from tensorflow.keras.models import load_model
-
+    import time
+    
 	# load the model
     model4 = VGG16()
 	# re-structure the model
@@ -265,6 +266,7 @@ def catclassify():
         
         #Check if 
         checkT = fileValidationCheck(img)
+       
         if ( checkT == "checkT"):
             checkT = True
             checkTType = False
